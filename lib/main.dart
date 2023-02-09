@@ -25,16 +25,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp.router(
-    //   routeInformationProvider: router.routeInformationProvider,
-    //   routeInformationParser: router.routeInformationParser,
-    //   routerDelegate: router.routerDelegate,
-    //   title: 'Flutter Demo',
-    //   theme: ThemeData(
-    //     primarySwatch: Colors.blue,
-    //   ),
-    // );
-    return MaterialApp(
+    return MaterialApp.router(
+      // routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+    );
+    /* return MaterialApp(
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyMedium: TextStyle(fontSize: 16),
@@ -42,6 +42,6 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
       home: CustomizeScreen(),
-    );
+    ); */
   }
 }
