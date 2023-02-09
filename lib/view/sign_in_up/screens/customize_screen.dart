@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:twitter_clone/utils/styles.dart';
 import 'package:twitter_clone/view/common/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/primary_button.dart';
@@ -79,8 +80,14 @@ class CustomizeScreen extends StatelessWidget {
             ),
             const Spacer(),
             Align(
-                alignment: Alignment.center,
-                child: PrimaryButton(text: "次へ", onPressed: () {})),
+              alignment: Alignment.center,
+              child: PrimaryButton(
+                  text: "次へ",
+                  onPressed: () {
+                    context.go('/privacy');
+                    print("push primary button");
+                  }),
+            ),
           ],
         ),
       ),
