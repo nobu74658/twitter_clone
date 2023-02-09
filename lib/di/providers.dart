@@ -3,6 +3,7 @@ import 'package:provider/single_child_widget.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 import 'package:twitter_clone/view_model/login_view_model.dart';
+import 'package:twitter_clone/view_model/name_field_view_model.dart';
 
 List<SingleChildWidget> globalProviders = [
   ...independentModels,
@@ -11,16 +12,24 @@ List<SingleChildWidget> globalProviders = [
 ];
 
 List<SingleChildWidget> independentModels = [
-  Provider<DatabaseManager>(create: (_) => DatabaseManager(),),
+  Provider<DatabaseManager>(
+    create: (_) => DatabaseManager(),
+  ),
 ];
 
 List<SingleChildWidget> dependentModels = [
-  ProxyProvider<DatabaseManager, UserRepository>(update: (_, dbManager, repo) => UserRepository(dbManager: dbManager),),
-
+  ProxyProvider<DatabaseManager, UserRepository>(
+    update: (_, dbManager, repo) => UserRepository(dbManager: dbManager),
+  ),
 ];
 
 List<SingleChildWidget> viewModels = [
   ChangeNotifierProvider<LoginViewModel>(
-    create: (context)=> LoginViewModel(userRepository: context.read<UserRepository>(),),
+    create: (context) => LoginViewModel(
+      userRepository: context.read<UserRepository>(),
+    ),
+  ),
+  ChangeNotifierProvider<NameFieldViewModel>(
+    create: (context) => NameFieldViewModel(),
   ),
 ];

@@ -1,9 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/di/providers.dart';
+import 'package:twitter_clone/firebase_options.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  runApp(
+    MultiProvider(
+      providers: globalProviders,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +35,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(fontSize: 18),
+          bodyMedium: TextStyle(fontSize: 16),
         ),
         scaffoldBackgroundColor: Colors.white,
       ),
