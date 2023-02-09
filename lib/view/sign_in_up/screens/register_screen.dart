@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter_clone/utils/styles.dart';
 import 'package:twitter_clone/view/common/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/primary_text_field.dart';
 
@@ -11,16 +12,27 @@ class RegisterScreen extends StatelessWidget {
       appBar: PrimaryAppBar(
         appBar: AppBar(),
         widget: _textButton(),
+        leadingWidth: 100,
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         children: [
-          Text(
+          const Text(
             "アカウントを作成",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: titleBold,
           ),
           PrimaryTextField(
             hintText: "名前",
+            controller: TextEditingController(),
+          ),
+          const SizedBox(height: 20),
+          PrimaryTextField(
+            hintText: "メール",
+            controller: TextEditingController(),
+          ),
+          const SizedBox(height: 20),
+          PrimaryTextField(
+            hintText: "生年月日",
             controller: TextEditingController(),
           ),
         ],
