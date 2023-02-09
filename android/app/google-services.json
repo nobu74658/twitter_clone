@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "271455247579",
+    "project_id": "nobu-twitter-clone",
+    "storage_bucket": "nobu-twitter-clone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271455247579:android:f373b4e1fcb17d513e00fe",
+        "android_client_info": {
+          "package_name": "com.example.twitter_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271455247579-ea526v3op6mh9numf26b63kttb4asmg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUk5pKuVWaOzSz7ob3hFS47vSdUXzNDug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271455247579-ea526v3op6mh9numf26b63kttb4asmg2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
