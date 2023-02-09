@@ -6,6 +6,8 @@ import 'package:twitter_clone/firebase_options.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_screen.dart';
 
+import 'view/sign_in_up/screens/customize_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: RegisterScreen(),
+      home: CustomizeScreen(),
     );
   }
 }
