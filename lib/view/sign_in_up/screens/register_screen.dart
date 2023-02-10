@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:twitter_clone/utils/styles.dart';
 import 'package:twitter_clone/view/common/primary_app_bar.dart';
+import 'package:twitter_clone/view/common/primary_button.dart';
 import 'package:twitter_clone/view/common/primary_text_field.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -11,7 +13,7 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       appBar: PrimaryAppBar(
         appBar: AppBar(),
-        widget: _textButton(),
+        widget: _textButton(context),
         leadingWidth: 100,
       ),
       body: ListView(
@@ -35,17 +37,24 @@ class RegisterScreen extends StatelessWidget {
             hintText: "生年月日",
             controller: TextEditingController(),
           ),
+          PrimaryButton(
+              text: "次へ",
+              onPressed: () {
+                context.go("/customize");
+              })
         ],
       ),
     );
   }
 
-  _textButton() {
+  _textButton(BuildContext context) {
     return TextButton(
       style:
           ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.black)),
-      child: Text("キャンセル"),
-      onPressed: () {},
+      child: const Text("キャンセル"),
+      onPressed: () {
+        context.go("/");
+      },
     );
   }
 }

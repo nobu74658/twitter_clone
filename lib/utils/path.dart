@@ -5,7 +5,7 @@ import 'package:twitter_clone/view/sign_in_up/screens/customize_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/privacy_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_screen.dart';
 
-final router = GoRouter(
+final GoRouter router = GoRouter(
   initialLocation: "/",
   routes: [
     GoRoute(

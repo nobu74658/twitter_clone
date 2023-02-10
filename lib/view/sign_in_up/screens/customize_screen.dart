@@ -12,7 +12,7 @@ class CustomizeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isToggle = true;
     return Scaffold(
-      appBar: PrimaryAppBar(appBar: AppBar(), widget: _leadingButton()),
+      appBar: PrimaryAppBar(appBar: AppBar(), widget: _leadingButton(context)),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 50),
         child: Column(
@@ -94,7 +94,7 @@ class CustomizeScreen extends StatelessWidget {
     );
   }
 
-  _leadingButton() {
+  _leadingButton(BuildContext context) {
     return Container(
       width: 18,
       height: 18,
@@ -103,7 +103,9 @@ class CustomizeScreen extends StatelessWidget {
             Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () {}),
+          onPressed: () {
+            context.go("/register");
+          }),
     );
   }
 }
