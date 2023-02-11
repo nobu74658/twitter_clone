@@ -1,14 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/utils/styles.dart';
-import 'package:twitter_clone/view/common/primary_app_bar.dart';
-import 'package:twitter_clone/view/common/primary_button.dart';
-import 'package:twitter_clone/view/common/primary_text_field.dart';
+import 'package:twitter_clone/view/common/components/firebase_error.dart';
+import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
+import 'package:twitter_clone/view/common/components/primary_button.dart';
+import 'package:twitter_clone/view/common/components/primary_text_field.dart';
+import 'package:twitter_clone/view/common/components/show_dialog.dart';
 import 'package:twitter_clone/view_model/login_view_model.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class AuthScreen extends StatelessWidget {
+  const AuthScreen({
+    super.key,
+    this.isRegister = true,
+  });
+
+  final bool isRegister;
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +27,13 @@ class RegisterScreen extends StatelessWidget {
         widget: _textButton(context),
         leadingWidth: 100,
       ),
-      body: Consumer<LoginViewModel>(
+      body: Consumer<SignInUpViewModel>(
         builder: (context, model, child) {
           return ListView(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             children: [
-              const Text(
-                "アカウントを作成",
+              Text(
+                isRegister ? "アカウントを作成" : "ログイン",
                 style: titleBold,
               ),
               const SizedBox(height: 20),
@@ -42,10 +51,14 @@ class RegisterScreen extends StatelessWidget {
                 suffixIcon: model.isValidPass ? _suffixIcon(context) : null,
               ),
               PrimaryButton(
-                  text: "次へ",
-                  onPressed: () {
-                    context.go("/customize");
-                  })
+                  text: isRegister ? "次へ" : "ログイン",
+                  onPressed: isRegister
+                      ? () {
+                          context.go(kCustomizePath);
+                        }
+                      : () async {
+                          await _login(context);
+                        })
             ],
           );
         },
@@ -71,5 +84,22 @@ class RegisterScreen extends StatelessWidget {
       scale: 20,
       color: Colors.green,
     );
+  }
+
+  _login(BuildContext context) async {
+    final signInUpViewModel = context.read<SignInUpViewModel>();
+    try {
+      await signInUpViewModel.signInUp(isRegister: false).then((value) {
+        if (value == null) {
+          SD.unknownError(context);
+        } else {
+          context.go(value ? kTopPath : kCheckInviteEmailPath);
+        }
+      });
+    } on FirebaseAuthException catch (e) {
+      EM.firebaseAuth(context, e.code);
+    } catch (e) {
+      EM.firebaseAuth(context, "error");
+    }
   }
 }

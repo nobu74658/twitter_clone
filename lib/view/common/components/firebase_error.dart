@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twitter_clone/view/common/show_dialog.dart';
+import 'package:twitter_clone/view/common/components/show_dialog.dart';
 
 class EM {
   static void firebaseAuth(BuildContext context, String code) {

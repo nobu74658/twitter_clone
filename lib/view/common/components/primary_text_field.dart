@@ -20,7 +20,7 @@ class PrimaryTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginViewModel = context.read<LoginViewModel>();
+    final loginViewModel = context.read<SignInUpViewModel>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
