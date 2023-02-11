@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/utils/styles.dart';
-import 'package:twitter_clone/view/common/primary_app_bar.dart';
-import 'package:twitter_clone/view/common/primary_button.dart';
-import 'package:twitter_clone/view/common/primary_switch_button.dart';
+import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
+import 'package:twitter_clone/view/common/components/primary_button.dart';
+import 'package:twitter_clone/view/common/components/primary_switch_button.dart';
 
 class CustomizeScreen extends StatelessWidget {
   const CustomizeScreen({super.key});
@@ -84,8 +85,7 @@ class CustomizeScreen extends StatelessWidget {
               child: PrimaryButton(
                   text: "次へ",
                   onPressed: () {
-                    context.go('/privacy');
-                    print("push primary button");
+                    context.go(kRegisterConfirmPath);
                   }),
             ),
           ],

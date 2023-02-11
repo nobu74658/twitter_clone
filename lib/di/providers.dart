@@ -24,8 +24,8 @@ List<SingleChildWidget> dependentModels = [
 ];
 
 List<SingleChildWidget> viewModels = [
-  ChangeNotifierProvider<LoginViewModel>(
-    create: (context) => LoginViewModel(
+  ChangeNotifierProvider<SignInUpViewModel>(
+    create: (context) => SignInUpViewModel(
       userRepository: context.read<UserRepository>(),
     ),
   ),

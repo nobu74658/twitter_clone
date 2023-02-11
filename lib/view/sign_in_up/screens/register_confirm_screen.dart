@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/utils/styles.dart';
-import 'package:twitter_clone/view/common/firebase_error.dart';
-import 'package:twitter_clone/view/common/primary_app_bar.dart';
-import 'package:twitter_clone/view/common/primary_button.dart';
-import 'package:twitter_clone/view/common/primary_text_field.dart';
-import 'package:twitter_clone/view/common/show_dialog.dart';
+import 'package:twitter_clone/view/common/components/firebase_error.dart';
+import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
+import 'package:twitter_clone/view/common/components/primary_button.dart';
+import 'package:twitter_clone/view/common/components/primary_text_field.dart';
+import 'package:twitter_clone/view/common/components/show_dialog.dart';
 import 'package:twitter_clone/view_model/login_view_model.dart';
 
 class RegisterConfirmScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class RegisterConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginViewModel = context.read<LoginViewModel>();
+    final signInUpViewModel = context.read<SignInUpViewModel>();
     return Scaffold(
       appBar: PrimaryAppBar(
         appBar: AppBar(),
@@ -34,24 +34,24 @@ class RegisterConfirmScreen extends StatelessWidget {
           PrimaryTextField(
             readOnly: true,
             hintText: "メール",
-            controller: loginViewModel.emailController,
-            isEdit: loginViewModel.emailController.text != "",
+            controller: signInUpViewModel.emailController,
+            isEdit: signInUpViewModel.emailController.text != "",
           ),
           const SizedBox(height: 20),
           PrimaryTextField(
             readOnly: true,
             hintText: "パスワード",
-            controller: loginViewModel.passController,
-            isEdit: loginViewModel.passController.text != "",
+            controller: signInUpViewModel.passController,
+            isEdit: signInUpViewModel.passController.text != "",
           ),
           PrimaryButton(
               text: "登録する",
-              onPressed:
-                  (loginViewModel.isValidEmail & loginViewModel.isValidPass)
-                      ? () async {
-                          await _signInUp(context);
-                        }
-                      : null),
+              onPressed: (signInUpViewModel.isValidEmail &
+                      signInUpViewModel.isValidPass)
+                  ? () async {
+                      await _signIn(context);
+                    }
+                  : null),
         ],
       ),
     );
@@ -68,8 +68,8 @@ class RegisterConfirmScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _signInUp(BuildContext context) async {
-    final loginViewModel = context.read<LoginViewModel>();
+  Future<void> _signIn(BuildContext context) async {
+    final loginViewModel = context.read<SignInUpViewModel>();
     try {
       await loginViewModel.signInUp(isRegister: true).then((value) {
         if (value == null) {

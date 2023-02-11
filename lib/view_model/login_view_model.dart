@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 
-class LoginViewModel extends ChangeNotifier {
-  LoginViewModel({required this.userRepository})
+class SignInUpViewModel extends ChangeNotifier {
+  SignInUpViewModel({required this.userRepository})
       : emailController = TextEditingController(),
         passController = TextEditingController(),
         isValidEmail = false,
@@ -34,8 +34,7 @@ class LoginViewModel extends ChangeNotifier {
         await auth.signOut();
       }
     }
-    await auth.currentUser?.sendEmailVerification();
-
+    print(userCredential.user?.emailVerified);
     return userCredential.user?.emailVerified;
   }
 
