@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/utils/styles.dart';
+import 'package:twitter_clone/view/common/firebase_error.dart';
 import 'package:twitter_clone/view/common/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/primary_button.dart';
 import 'package:twitter_clone/view/common/primary_text_field.dart';
+import 'package:twitter_clone/view/common/show_dialog.dart';
 import 'package:twitter_clone/view_model/login_view_model.dart';
 
 class RegisterConfirmScreen extends StatelessWidget {
@@ -44,8 +48,8 @@ class RegisterConfirmScreen extends StatelessWidget {
               text: "登録する",
               onPressed:
                   (loginViewModel.isValidEmail & loginViewModel.isValidPass)
-                      ? () {
-                          loginViewModel.signInUp(isRegister: true);
+                      ? () async {
+                          await _signInUp(context);
                         }
                       : null),
         ],
@@ -62,5 +66,22 @@ class RegisterConfirmScreen extends StatelessWidget {
         context.go("/");
       },
     );
+  }
+
+  Future<void> _signInUp(BuildContext context) async {
+    final loginViewModel = context.read<LoginViewModel>();
+    try {
+      await loginViewModel.signInUp(isRegister: true).then((value) {
+        if (value == null) {
+          SD.unknownError(context);
+        } else {
+          context.go(value ? kInitialPath : kCheckInviteEmailPath);
+        }
+      });
+    } on FirebaseAuthException catch (e) {
+      EM.firebaseAuth(context, e.code);
+    } catch (e) {
+      EM.firebaseAuth(context, "error");
+    }
   }
 }
