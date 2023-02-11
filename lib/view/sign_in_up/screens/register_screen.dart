@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/utils/styles.dart';
 import 'package:twitter_clone/view/common/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/primary_button.dart';
 import 'package:twitter_clone/view/common/primary_text_field.dart';
+import 'package:twitter_clone/view_model/login_view_model.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -16,33 +18,37 @@ class RegisterScreen extends StatelessWidget {
         widget: _textButton(context),
         leadingWidth: 100,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        children: [
-          const Text(
-            "アカウントを作成",
-            style: titleBold,
-          ),
-          PrimaryTextField(
-            hintText: "名前",
-            controller: TextEditingController(),
-          ),
-          const SizedBox(height: 20),
-          PrimaryTextField(
-            hintText: "メール",
-            controller: TextEditingController(),
-          ),
-          const SizedBox(height: 20),
-          PrimaryTextField(
-            hintText: "生年月日",
-            controller: TextEditingController(),
-          ),
-          PrimaryButton(
-              text: "次へ",
-              onPressed: () {
-                context.go("/customize");
-              })
-        ],
+      body: Consumer<LoginViewModel>(
+        builder: (context, model, child) {
+          return ListView(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            children: [
+              const Text(
+                "アカウントを作成",
+                style: titleBold,
+              ),
+              const SizedBox(height: 20),
+              PrimaryTextField(
+                hintText: "メール",
+                controller: model.emailController,
+                isEdit: model.emailController.text != "",
+                suffixIcon: model.isValidEmail ? _suffixIcon(context) : null,
+              ),
+              const SizedBox(height: 20),
+              PrimaryTextField(
+                hintText: "パスワード",
+                controller: model.passController,
+                isEdit: model.passController.text != "",
+                suffixIcon: model.isValidPass ? _suffixIcon(context) : null,
+              ),
+              PrimaryButton(
+                  text: "次へ",
+                  onPressed: () {
+                    context.go("/customize");
+                  })
+            ],
+          );
+        },
       ),
     );
   }
@@ -55,6 +61,15 @@ class RegisterScreen extends StatelessWidget {
       onPressed: () {
         context.go("/");
       },
+    );
+  }
+
+  _suffixIcon(BuildContext context) {
+    print("_suffixIcon");
+    return Image.asset(
+      "assets/images/verified.png",
+      scale: 20,
+      color: Colors.green,
     );
   }
 }

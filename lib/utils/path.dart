@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/auth_code_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/customize_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/privacy_screen.dart';
+import 'package:twitter_clone/view/sign_in_up/screens/register_confirm_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_screen.dart';
 
 final GoRouter router = GoRouter(
@@ -18,6 +19,12 @@ final GoRouter router = GoRouter(
       path: "/register",
       pageBuilder: (context, state) => const MaterialPage(
         child: RegisterScreen(),
+      ),
+    ),
+    GoRoute(
+      path: "/register-confirm",
+      pageBuilder: (context, state) => const MaterialPage(
+        child: RegisterConfirmScreen(),
       ),
     ),
     GoRoute(
