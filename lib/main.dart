@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       routerDelegate: router.routerDelegate,
       title: 'Flutter Demo',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
       ),
     );
