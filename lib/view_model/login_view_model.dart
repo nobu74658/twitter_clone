@@ -9,6 +9,7 @@ class LoginViewModel extends ChangeNotifier {
         isValidEmail = false,
         isValidPass = false;
   final UserRepository userRepository;
+  final auth = FirebaseAuth.instance;
 
   final TextEditingController emailController;
   final TextEditingController passController;
@@ -16,12 +17,11 @@ class LoginViewModel extends ChangeNotifier {
   bool isValidPass;
 
   /// メールアドレスでログイン・新規アカウント登録
-  Future<void> signInUp({required bool isRegister}) async {
+  Future<bool?> signInUp({bool isRegister = true}) async {
     final String email = emailController.text;
     final String pass = emailController.text;
-    final auth = FirebaseAuth.instance;
 
-    isRegister
+    final UserCredential userCredential = isRegister
         ? await auth.createUserWithEmailAndPassword(
             email: email, password: pass)
         : await auth.signInWithEmailAndPassword(email: email, password: pass);
@@ -34,15 +34,15 @@ class LoginViewModel extends ChangeNotifier {
         await auth.signOut();
       }
     }
-
     await auth.currentUser?.sendEmailVerification();
+
+    return userCredential.user?.emailVerified;
   }
 
   void validation() {
     isValidEmail = emailController.text.isNotEmpty;
-    print("email" + isValidEmail.toString());
     isValidPass = passController.text.length > 7;
-    print("pass" + isValidPass.toString());
+
     notifyListeners();
   }
 }
