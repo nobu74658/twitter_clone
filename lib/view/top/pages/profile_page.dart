@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/common/components/sign_out_text_button.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
@@ -30,10 +32,12 @@ class ProfilePage extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundImage: AssetImage(
-                      currentUser.userIcon ?? "assets/images/unknown.png"),
+                      currentUser?.userIcon ?? "assets/images/unknown.png"),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go(kEditProfilePath);
+                  },
                   child: Text("プロフィール編集"),
                 ),
               ],
@@ -41,17 +45,17 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            currentUser.userName,
+            currentUser?.userName ?? "unknown",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          Text(currentUser.bio ?? "プロフィール文章が未設定です"),
+          Text(currentUser?.bio ?? "プロフィール文章が未設定です"),
           const SizedBox(height: 10),
           Row(
             children: [
-              Text("${currentUser.follow}フォロー中"),
+              Text("${currentUser?.follow}フォロー中"),
               const SizedBox(width: 10),
-              Text("${currentUser.follower}フォロワー"),
+              Text("${currentUser?.follower}フォロワー"),
               const Spacer(),
               ElevatedButton(
                 onPressed: () {},

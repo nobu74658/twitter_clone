@@ -7,6 +7,7 @@ import 'package:twitter_clone/view/sign_in_up/screens/check_invite_email.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/customize_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_confirm_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/auth_screen.dart';
+import 'package:twitter_clone/view/top/pages/edit_profile_page.dart';
 import 'package:twitter_clone/view/top/screens/top_screen.dart';
 
 const String kInitialPath = "/";
@@ -16,6 +17,7 @@ const String kRegisterConfirmPath = "/register-confirm";
 const String kCustomizePath = "/customize";
 const String kTopPath = "/top";
 const String kLoginPath = "/login";
+const String kEditProfilePath = "/edit-profile";
 const String kPath = "";
 
 final GoRouter router = GoRouter(
@@ -109,6 +111,12 @@ final GoRouter router = GoRouter(
       path: kCheckInviteEmailPath,
       pageBuilder: (context, state) => const MaterialPage(
         child: CheckInviteEmailScreen(),
+      ),
+    ),
+    GoRoute(
+      path: kEditProfilePath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: EditProfilePage(),
       ),
     ),
   ],
