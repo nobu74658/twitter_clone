@@ -18,13 +18,16 @@ const String kLoginPath = "/login";
 const String kPath = "";
 
 final GoRouter router = GoRouter(
-  initialLocation: kInitialPath,
+  // initialLocation: kInitialPath,
   redirect: (context, state) {
     final currentUser = FirebaseAuth.instance.currentUser;
-    print(currentUser);
+    // print(currentUser);
     String? path;
     if (currentUser == null) {
       switch (state.location) {
+        case kInitialPath:
+          path = kLoginPath;
+          break;
         case kRegisterPath:
           break;
         case kLoginPath:
@@ -36,12 +39,15 @@ final GoRouter router = GoRouter(
         case kCheckInviteEmailPath:
           break;
         default:
-          path = kInitialPath;
+          path = kLoginPath;
       }
       print(state.location);
-      return path;
     } else {
+      print("loggedIn: ${state.location}");
       switch (state.location) {
+        case kInitialPath:
+          path = kTopPath;
+          break;
         case kRegisterPath:
           path = kTopPath;
           break;
@@ -59,8 +65,8 @@ final GoRouter router = GoRouter(
           break;
         default:
       }
-      return path;
     }
+    return path;
   },
   routes: [
     GoRoute(

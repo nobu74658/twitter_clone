@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
+import 'package:twitter_clone/view_model/sign_in_up_view_model.dart';
 
 class TopScreen extends StatelessWidget {
   const TopScreen({super.key});
@@ -15,7 +17,8 @@ class TopScreen extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
+              final signInUpViewModel = context.read<SignInUpViewModel>();
+              await signInUpViewModel.signOut();
             },
             child: const Text("サインアウト"),
           ),

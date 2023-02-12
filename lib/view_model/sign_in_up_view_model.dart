@@ -10,6 +10,7 @@ class SignInUpViewModel extends ChangeNotifier {
         isValidPass = false;
   final UserRepository userRepository;
   final auth = FirebaseAuth.instance;
+  User? currentUser;
 
   final TextEditingController emailController;
   final TextEditingController passController;
@@ -27,17 +28,24 @@ class SignInUpViewModel extends ChangeNotifier {
         ? await auth.createUserWithEmailAndPassword(
             email: email, password: pass)
         : await auth.signInWithEmailAndPassword(email: email, password: pass);
+    currentUser = auth.currentUser;
 
     final isVerified = auth.currentUser?.emailVerified;
 
     if (isVerified != null) {
       if (!isVerified) {
         auth.currentUser?.sendEmailVerification();
-        await auth.signOut();
+        await signOut();
       }
     }
 
     return userCredential.user?.emailVerified;
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    currentUser = null;
+    // notifyListeners();
   }
 
   void validation() {
