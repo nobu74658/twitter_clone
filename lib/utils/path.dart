@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/view/common/screen/error_screen.dart';
+import 'package:twitter_clone/view/common/screen/splash_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/check_invite_email.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/customize_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_confirm_screen.dart';
@@ -18,15 +19,15 @@ const String kLoginPath = "/login";
 const String kPath = "";
 
 final GoRouter router = GoRouter(
-  // initialLocation: kInitialPath,
+  initialLocation: kInitialPath,
   redirect: (context, state) {
     final currentUser = FirebaseAuth.instance.currentUser;
-    // print(currentUser);
     String? path;
     if (currentUser == null) {
       switch (state.location) {
         case kInitialPath:
-          path = kLoginPath;
+          // path = kLoginPath;
+          path = kInitialPath;
           break;
         case kRegisterPath:
           break;
@@ -46,7 +47,8 @@ final GoRouter router = GoRouter(
       print("loggedIn: ${state.location}");
       switch (state.location) {
         case kInitialPath:
-          path = kTopPath;
+          // path = kTopPath;
+          path = kInitialPath;
           break;
         case kRegisterPath:
           path = kTopPath;
@@ -72,7 +74,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: kInitialPath,
       pageBuilder: (context, state) => const MaterialPage(
-        child: AuthScreen(isRegister: false),
+        child: SplashScreen(),
       ),
     ),
     GoRoute(

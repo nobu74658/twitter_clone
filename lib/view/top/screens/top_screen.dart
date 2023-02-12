@@ -20,7 +20,7 @@ class TopScreen extends StatelessWidget {
               final signInUpViewModel = context.read<SignInUpViewModel>();
               await signInUpViewModel
                   .signOut()
-                  .then((value) => context.go(kInitialPath));
+                  .then((value) => context.go(kLoginPath));
             },
             child: const Text("サインアウト"),
           ),

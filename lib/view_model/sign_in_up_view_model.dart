@@ -44,8 +44,12 @@ class SignInUpViewModel extends ChangeNotifier {
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
+    emailController.clear();
+    passController.clear();
+    isValidEmail = false;
+    isValidPass = false;
     currentUser = null;
-    // notifyListeners();
+    notifyListeners();
   }
 
   void validation() {

@@ -1,20 +1,22 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
-// import 'package:twitter_clone/utils/path.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:twitter_clone/utils/path.dart';
 
-// class Authentication {
-//   static Future<FirebaseApp> initializeApp({
-//     required BuildCOntext context,
-//   }) async {
-//     FirebaseApp firebaseApp = await Firebase.initializeApp();
+/// 参考
+/// https://blog.codemagic.io/firebase-authentication-google-sign-in-using-flutter-jpn/
 
-//     User? user = FirebaseAuth.instance.currentUser;
+class Authentication {
+  static Future<void> initializeFirebase({
+    required BuildContext context,
+  }) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    await Future.delayed(const Duration(seconds: 3));
 
-//     if (user != null) {
-//       context.go(kTopPath);
-//     }
-
-//     return firebaseApp;
-//   }
-// }
+    if (user != null) {
+      context.go(kTopPath);
+    } else {
+      context.go(kLoginPath);
+    }
+  }
+}
