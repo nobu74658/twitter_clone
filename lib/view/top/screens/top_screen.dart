@@ -19,9 +19,6 @@ class TopScreen extends StatelessWidget {
 
     return Consumer<PageViewModel>(builder: (context, model, child) {
       return Scaffold(
-        appBar: PrimaryAppBar(
-          appBar: AppBar(),
-        ),
         body: pages[model.currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
