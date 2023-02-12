@@ -13,7 +13,7 @@ class CustomizeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isToggle = true;
     return Scaffold(
-      appBar: PrimaryAppBar(appBar: AppBar(), widget: _leadingButton(context)),
+      appBar: PrimaryAppBar(appBar: AppBar(), leading: _leadingButton(context)),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 50),
         child: Column(

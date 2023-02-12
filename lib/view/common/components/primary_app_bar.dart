@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class PrimaryAppBar extends StatelessWidget implements PreferredSizeWidget {
   const PrimaryAppBar(
-      {super.key, required this.appBar, this.widget, this.leadingWidth = 50});
+      {super.key, required this.appBar, this.leading, this.leadingWidth = 50});
 
   final AppBar appBar;
-  final Widget? widget;
+  final Widget? leading;
   final double leadingWidth;
 
   @override
@@ -18,7 +18,7 @@ class PrimaryAppBar extends StatelessWidget implements PreferredSizeWidget {
         scale: 4,
       ),
       leadingWidth: leadingWidth,
-      leading: widget,
+      leading: leading,
     );
   }
 

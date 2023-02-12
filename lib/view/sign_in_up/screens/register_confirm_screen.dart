@@ -20,7 +20,7 @@ class RegisterConfirmScreen extends StatelessWidget {
     return Scaffold(
       appBar: PrimaryAppBar(
         appBar: AppBar(),
-        widget: _textButton(context),
+        leading: _textButton(context),
         leadingWidth: 100,
       ),
       body: ListView(
