@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/view/common/components/sign_out_text_button.dart';
+import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userViewModel = context.read<UserViewModel>();
+    final currentUser = userViewModel.currentUser;
+
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -24,7 +29,8 @@ class ProfilePage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage("assets/images/logo.png"),
+                  backgroundImage: AssetImage(
+                      currentUser.userIcon ?? "assets/images/unknown.png"),
                 ),
                 ElevatedButton(
                   onPressed: () {},
@@ -35,17 +41,17 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            "山田太郎",
+            currentUser.userName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          Text("初めまして、山田太郎です。フォローしてください。" * 10),
+          Text(currentUser.bio ?? "プロフィール文章が未設定です"),
           const SizedBox(height: 10),
           Row(
             children: [
-              Text("104フォロー中"),
+              Text("${currentUser.follow}フォロー中"),
               const SizedBox(width: 10),
-              Text("392フォロワー"),
+              Text("${currentUser.follower}フォロワー"),
               const Spacer(),
               ElevatedButton(
                 onPressed: () {},

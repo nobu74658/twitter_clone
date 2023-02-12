@@ -4,6 +4,7 @@ import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 import 'package:twitter_clone/view_model/page_view_model.dart';
 import 'package:twitter_clone/view_model/sign_in_up_view_model.dart';
+import 'package:twitter_clone/view_model/user_view_model.dart';
 
 List<SingleChildWidget> globalProviders = [
   ...independentModels,
@@ -26,6 +27,11 @@ List<SingleChildWidget> dependentModels = [
 List<SingleChildWidget> viewModels = [
   ChangeNotifierProvider<SignInUpViewModel>(
     create: (context) => SignInUpViewModel(
+      userRepository: context.read<UserRepository>(),
+    ),
+  ),
+  ChangeNotifierProvider<UserViewModel>(
+    create: (context) => UserViewModel(
       userRepository: context.read<UserRepository>(),
     ),
   ),

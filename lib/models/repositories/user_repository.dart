@@ -62,7 +62,11 @@ class UserRepository {
       return await dbManager.getUserInfoFromDbById(userId);
     } else {
       return User(
-          userId: userId, userName: "unknown", createdAt: DateTime.now());
+          userId: userId,
+          userName: "unknown",
+          follow: 0,
+          follower: 0,
+          createdAt: DateTime.now());
     }
   }
 
@@ -77,6 +81,8 @@ class UserRepository {
         userName: firebaseUser.displayName ?? "unknown",
         email: firebaseUser.email,
         bio: "",
+        follow: 0,
+        follower: 0,
         createdAt: DateTime.now());
   }
 }

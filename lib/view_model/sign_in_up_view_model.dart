@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 
@@ -9,8 +8,6 @@ class SignInUpViewModel extends ChangeNotifier {
         isValidEmail = false,
         isValidPass = false;
   final UserRepository userRepository;
-  final auth = FirebaseAuth.instance;
-  User? currentUser;
 
   final TextEditingController emailController;
   final TextEditingController passController;
@@ -42,7 +39,6 @@ class SignInUpViewModel extends ChangeNotifier {
 
   Future<void> signOut() async {
     await userRepository.signOut();
-    currentUser = null;
     notifyListeners();
   }
 

@@ -6,6 +6,8 @@ class User {
   final DateTime createdAt;
   final String? email;
   final String? bio;
+  final int follow;
+  final int follower;
 
 //<editor-fold desc="Data Methods">
 
@@ -17,6 +19,8 @@ class User {
     required this.createdAt,
     this.email,
     this.bio,
+    required this.follow,
+    required this.follower,
   });
 
   @override
@@ -30,7 +34,9 @@ class User {
           updatedAt == other.updatedAt &&
           createdAt == other.createdAt &&
           email == other.email &&
-          bio == other.bio);
+          bio == other.bio &&
+          follow == other.follow &&
+          follower == other.follower);
 
   @override
   int get hashCode =>
@@ -40,7 +46,9 @@ class User {
       updatedAt.hashCode ^
       createdAt.hashCode ^
       email.hashCode ^
-      bio.hashCode;
+      bio.hashCode ^
+      follow.hashCode ^
+      follower.hashCode;
 
   @override
   String toString() {
@@ -52,6 +60,8 @@ class User {
         ' createdAt: $createdAt,' +
         ' email: $email,' +
         ' bio: $bio,' +
+        ' follow: $follow,' +
+        ' follower: $follower,' +
         '}';
   }
 
@@ -63,6 +73,8 @@ class User {
     DateTime? createdAt,
     String? email,
     String? bio,
+    int? follow,
+    int? follower,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -72,6 +84,8 @@ class User {
       createdAt: createdAt ?? this.createdAt,
       email: email ?? this.email,
       bio: bio ?? this.bio,
+      follow: follow ?? this.follow,
+      follower: follower ?? this.follower,
     );
   }
 
@@ -84,6 +98,8 @@ class User {
       'createdAt': this.createdAt,
       'email': this.email,
       'bio': this.bio,
+      'follow': this.follow,
+      'follower': this.follower,
     };
   }
 
@@ -96,6 +112,8 @@ class User {
       createdAt: map['createdAt'].toDate(),
       email: map['email'] as String?,
       bio: map['bio'] as String?,
+      follow: map['follow'] as int,
+      follower: map['follower'] as int,
     );
   }
 
