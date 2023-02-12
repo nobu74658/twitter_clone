@@ -18,15 +18,17 @@ class TopScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               final signInUpViewModel = context.read<SignInUpViewModel>();
-              await signInUpViewModel.signOut();
+              await signInUpViewModel
+                  .signOut()
+                  .then((value) => context.go(kInitialPath));
             },
             child: const Text("サインアウト"),
           ),
-          const SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: () => context.go(kInitialPath),
-            child: const Text("戻る"),
-          ),
+          // const SizedBox(height: 40),
+          // ElevatedButton(
+          //   onPressed: () => context.go(kInitialPath),
+          //   child: const Text("戻る"),
+          // ),
         ],
       ),
     );
