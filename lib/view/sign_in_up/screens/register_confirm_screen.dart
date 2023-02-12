@@ -32,26 +32,21 @@ class RegisterConfirmScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           PrimaryTextField(
-            readOnly: true,
             hintText: "メール",
             controller: signInUpViewModel.emailController,
             isEdit: signInUpViewModel.emailController.text != "",
           ),
           const SizedBox(height: 20),
           PrimaryTextField(
-            readOnly: true,
             hintText: "パスワード",
             controller: signInUpViewModel.passController,
             isEdit: signInUpViewModel.passController.text != "",
           ),
           PrimaryButton(
               text: "登録する",
-              onPressed: (signInUpViewModel.isValidEmail &
-                      signInUpViewModel.isValidPass)
-                  ? () async {
-                      await _signIn(context);
-                    }
-                  : null),
+              onPressed: () async {
+                await _signIn(context);
+              }),
         ],
       ),
     );

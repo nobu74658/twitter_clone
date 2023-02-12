@@ -23,16 +23,19 @@ class SignInUpViewModel extends ChangeNotifier {
 
     final String email = emailController.text;
     final String pass = passController.text;
-    emailController.clear();
-    passController.clear();
-    isValidEmail = false;
-    isValidPass = false;
 
     bool? isVerified = await userRepository.signInUp(
       email: email,
       pass: pass,
       isRegister: isRegister,
     );
+    if (isVerified == true) {
+      emailController.clear();
+      passController.clear();
+      isValidEmail = false;
+      isValidPass = false;
+      notifyListeners();
+    }
 
     return isVerified;
   }

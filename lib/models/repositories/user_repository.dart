@@ -9,6 +9,7 @@ class UserRepository {
   static User? currentUser;
   final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
 
+  // 新規登録・ログイン
   Future<bool?> signInUp({
     required String email,
     required String pass,
@@ -19,19 +20,63 @@ class UserRepository {
             email: email, password: pass)
         : await _auth.signInWithEmailAndPassword(email: email, password: pass);
 
-    final isVerified = _auth.currentUser?.emailVerified;
+    final firebaseUser = _auth.currentUser;
+    if (firebaseUser != null) {
+      final isVerified = firebaseUser.emailVerified;
 
-    if (isVerified != null) {
-      if (!isVerified) {
-        _auth.currentUser?.sendEmailVerification();
-        await signOut();
+      if (isVerified == false) {
+        if (!isVerified) {
+          firebaseUser.sendEmailVerification();
+          await signOut();
+        }
+      } else {
+        final isUserExistedInDb =
+            await dbManager.searchUserInDbByUserId(firebaseUser.uid);
+        if (!isUserExistedInDb) {
+          await dbManager.insertUser(_convertToUser(firebaseUser));
+        }
+        currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
       }
     }
-
     return userCredential.user?.emailVerified;
   }
 
+  // サインアウト
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  // ユーザー自身の情報を取得
+  Future<bool> getUserInfo() async {
+    final firebaseUser = _auth.currentUser;
+    if (firebaseUser != null) {
+      currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
+      return true;
+    }
+    return false;
+  }
+
+  // 他ユーザーの情報を取得
+  Future<User> getUserInfoById(String userId) async {
+    if (await dbManager.searchUserInDbByUserId(userId)) {
+      return await dbManager.getUserInfoFromDbById(userId);
+    } else {
+      return User(
+          userId: userId, userName: "unknown", createdAt: DateTime.now());
+    }
+  }
+
+  // firebaseUserをデータベースに追加
+  Future<void> insertUser(auth.User firebaseUser) async {
+    await dbManager.insertUser(_convertToUser(firebaseUser));
+  }
+
+  _convertToUser(auth.User firebaseUser) {
+    return User(
+        userId: firebaseUser.uid,
+        userName: firebaseUser.displayName ?? "unknown",
+        email: firebaseUser.email,
+        bio: "",
+        createdAt: DateTime.now());
   }
 }

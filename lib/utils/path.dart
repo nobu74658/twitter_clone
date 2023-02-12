@@ -21,12 +21,11 @@ const String kPath = "";
 final GoRouter router = GoRouter(
   initialLocation: kInitialPath,
   redirect: (context, state) {
-    final currentUser = FirebaseAuth.instance.currentUser;
+    final firebaseUser = FirebaseAuth.instance.currentUser;
     String? path;
-    if (currentUser == null) {
+    if (firebaseUser == null) {
       switch (state.location) {
         case kInitialPath:
-          // path = kLoginPath;
           path = kInitialPath;
           break;
         case kRegisterPath:
@@ -47,7 +46,6 @@ final GoRouter router = GoRouter(
       print("loggedIn: ${state.location}");
       switch (state.location) {
         case kInitialPath:
-          // path = kTopPath;
           path = kInitialPath;
           break;
         case kRegisterPath:
