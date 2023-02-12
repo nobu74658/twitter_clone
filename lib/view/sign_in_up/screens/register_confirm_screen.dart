@@ -9,7 +9,7 @@ import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/components/primary_button.dart';
 import 'package:twitter_clone/view/common/components/primary_text_field.dart';
 import 'package:twitter_clone/view/common/components/show_dialog.dart';
-import 'package:twitter_clone/view_model/login_view_model.dart';
+import 'package:twitter_clone/view_model/sign_in_up_view_model.dart';
 
 class RegisterConfirmScreen extends StatelessWidget {
   const RegisterConfirmScreen({super.key});

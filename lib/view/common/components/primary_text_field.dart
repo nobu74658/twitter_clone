@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter_clone/view_model/login_view_model.dart';
+import 'package:twitter_clone/view_model/sign_in_up_view_model.dart';
 
 class PrimaryTextField extends StatelessWidget {
   const PrimaryTextField({

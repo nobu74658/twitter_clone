@@ -18,8 +18,10 @@ class SignInUpViewModel extends ChangeNotifier {
 
   /// メールアドレスでログイン・新規アカウント登録
   Future<bool?> signInUp({bool isRegister = true}) async {
+    print("signInUp in view model");
+
     final String email = emailController.text;
-    final String pass = emailController.text;
+    final String pass = passController.text;
 
     final UserCredential userCredential = isRegister
         ? await auth.createUserWithEmailAndPassword(
@@ -34,7 +36,7 @@ class SignInUpViewModel extends ChangeNotifier {
         await auth.signOut();
       }
     }
-    print(userCredential.user?.emailVerified);
+
     return userCredential.user?.emailVerified;
   }
 

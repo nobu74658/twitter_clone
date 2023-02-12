@@ -9,7 +9,7 @@ import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/components/primary_button.dart';
 import 'package:twitter_clone/view/common/components/primary_text_field.dart';
 import 'package:twitter_clone/view/common/components/show_dialog.dart';
-import 'package:twitter_clone/view_model/login_view_model.dart';
+import 'package:twitter_clone/view_model/sign_in_up_view_model.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({
@@ -50,15 +50,27 @@ class AuthScreen extends StatelessWidget {
                 isEdit: model.passController.text != "",
                 suffixIcon: model.isValidPass ? _suffixIcon(context) : null,
               ),
+              const SizedBox(height: 40),
               PrimaryButton(
-                  text: isRegister ? "次へ" : "ログイン",
-                  onPressed: isRegister
-                      ? () {
-                          context.go(kCustomizePath);
-                        }
-                      : () async {
-                          await _login(context);
-                        })
+                text: isRegister ? "次へ" : "ログイン",
+                onPressed: isRegister
+                    ? () {
+                        context.go(kCustomizePath);
+                      }
+                    : () async {
+                        await _login(context);
+                      },
+              ),
+              const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => isRegister
+                      ? context.go(kLoginPath)
+                      : context.go(kRegisterPath),
+                  child: Text(isRegister ? "ログイン画面へ" : "新規アカウント登録"),
+                ),
+              ),
             ],
           );
         },
