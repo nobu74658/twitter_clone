@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
-import 'package:twitter_clone/view/top/pages/home_page.dart';
-import 'package:twitter_clone/view/top/pages/message_page.dart';
-import 'package:twitter_clone/view/top/pages/notify_page.dart';
-import 'package:twitter_clone/view/top/pages/search_page.dart';
+import 'package:twitter_clone/view/top/pages/time_line_page.dart';
+import 'package:twitter_clone/view/top/pages/like_page.dart';
+import 'package:twitter_clone/view/top/pages/profile_page.dart';
 import 'package:twitter_clone/view_model/page_view_model.dart';
 
 class TopScreen extends StatelessWidget {
@@ -13,10 +12,9 @@ class TopScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const pages = [
-      HomePage(),
-      SearchPage(),
-      NotifyPage(),
-      MessagePage(),
+      TimeLinePage(),
+      LikePage(),
+      ProfilePage(),
     ];
 
     return Consumer<PageViewModel>(builder: (context, model, child) {
@@ -38,16 +36,12 @@ class TopScreen extends StatelessWidget {
               label: "ホーム",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: "検索",
+              icon: Icon(Icons.favorite),
+              label: "いいね",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: "通知",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mail),
-              label: "メッセージ",
+              icon: Icon(Icons.person_rounded),
+              label: "マイページ",
             ),
           ],
           onTap: (index) => model.pageTransition(index),

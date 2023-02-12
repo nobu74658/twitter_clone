@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class MessagePage extends StatelessWidget {
-  const MessagePage({super.key});
+class LikePage extends StatelessWidget {
+  const LikePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("message page"),
+      body: Text("like page"),
     );
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class TimeLinePage extends StatelessWidget {
+  const TimeLinePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("search page"),
+      body: Text("homepage"),
     );
   }
 }
