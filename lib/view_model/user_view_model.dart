@@ -6,5 +6,9 @@ class UserViewModel extends ChangeNotifier {
   UserViewModel({required this.userRepository});
 
   final UserRepository userRepository;
-  User get currentUser => UserRepository.currentUser!;
+  User? get currentUser => UserRepository.currentUser;
+
+  Future<void> getCurrentUser() async {
+    await userRepository.getCurrentUser();
+  }
 }

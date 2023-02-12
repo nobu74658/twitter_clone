@@ -41,6 +41,19 @@ class UserRepository {
     return userCredential.user?.emailVerified;
   }
 
+  // ユーザー情報を取得
+  Future<void> getCurrentUser() async {
+    final firebaseUser = _auth.currentUser;
+    if (firebaseUser != null) {
+      final isUserExistedInDb =
+          await dbManager.searchUserInDbByUserId(firebaseUser.uid);
+      if (!isUserExistedInDb) {
+        await dbManager.insertUser(_convertToUser(firebaseUser));
+      }
+      currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
+    }
+  }
+
   // サインアウト
   Future<void> signOut() async {
     await _auth.signOut();
