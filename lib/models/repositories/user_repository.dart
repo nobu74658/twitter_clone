@@ -138,4 +138,14 @@ class UserRepository {
 
     await dbManager.updateUserInfo(newUserInfo);
   }
+
+  // パスワードを変更
+  Future<void> passReset(String pass) async {
+    await _auth.currentUser!.updatePassword(pass);
+  }
+
+  // メールアドレスを変更
+  Future<void> emailReset(String email) async {
+    await _auth.currentUser!.updateEmail(email);
+  }
 }

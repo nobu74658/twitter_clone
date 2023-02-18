@@ -64,12 +64,16 @@ class ProfilePage extends StatelessWidget {
           Row(
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(kEmailResetAuthPath);
+                },
                 child: Text("メールアドレスを変更"),
               ),
               SizedBox(width: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(kPassResetAuthPath);
+                },
                 child: Text("パスワードを変更"),
               ),
             ],

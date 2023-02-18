@@ -8,6 +8,7 @@ class SignInUpViewModel extends ChangeNotifier {
         isValidEmail = false,
         isValidPass = false;
   final UserRepository userRepository;
+  bool isProcessing = false;
 
   final TextEditingController emailController;
   final TextEditingController passController;
@@ -17,6 +18,8 @@ class SignInUpViewModel extends ChangeNotifier {
   /// メールアドレスでログイン・新規アカウント登録
   Future<bool?> signInUp({bool isRegister = true}) async {
     print("signInUp in view model");
+    isProcessing = true;
+    notifyListeners();
 
     final String email = emailController.text;
     final String pass = passController.text;
@@ -34,11 +37,19 @@ class SignInUpViewModel extends ChangeNotifier {
       notifyListeners();
     }
 
+    isProcessing = false;
+    notifyListeners();
+
     return isVerified;
   }
 
   Future<void> signOut() async {
+    isProcessing = true;
+    notifyListeners();
+
     await userRepository.signOut();
+
+    isProcessing = false;
     notifyListeners();
   }
 
@@ -46,6 +57,34 @@ class SignInUpViewModel extends ChangeNotifier {
     isValidEmail = emailController.text.isNotEmpty;
     isValidPass = passController.text.length > 7;
 
+    notifyListeners();
+  }
+
+  Future<void> passReset() async {
+    isProcessing = true;
+    notifyListeners();
+
+    final pass = passController.text;
+
+    await userRepository.passReset(pass);
+
+    isProcessing = false;
+    notifyListeners();
+  }
+
+  void endProcess() {
+    isProcessing = false;
+    notifyListeners();
+  }
+
+  Future<void> emailReset() async {
+    isProcessing = true;
+    notifyListeners();
+
+    final email = emailController.text;
+    await userRepository.emailReset(email);
+
+    isProcessing = false;
     notifyListeners();
   }
 }

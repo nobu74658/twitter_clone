@@ -5,8 +5,11 @@ import 'package:twitter_clone/view/common/screen/error_screen.dart';
 import 'package:twitter_clone/view/common/screen/splash_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/check_invite_email.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/customize_screen.dart';
+import 'package:twitter_clone/view/sign_in_up/screens/email_reset_confirm_screen.dart';
+import 'package:twitter_clone/view/sign_in_up/screens/pass_reset_confirm_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/register_confirm_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/auth_screen.dart';
+import 'package:twitter_clone/view/sign_in_up/screens/reset_auth_screen.dart';
 import 'package:twitter_clone/view/top/pages/edit_profile_page.dart';
 import 'package:twitter_clone/view/top/screens/top_screen.dart';
 
@@ -18,6 +21,10 @@ const String kCustomizePath = "/customize";
 const String kTopPath = "/top";
 const String kLoginPath = "/login";
 const String kEditProfilePath = "/edit-profile";
+const String kPassResetConfirmPath = "/pass-reset-confirm";
+const String kPassResetAuthPath = "/pass-reset-auth";
+const String kEmailResetConfirmPath = "/email-reset-confirm";
+const String kEmailResetAuthPath = "/email-reset-auth";
 const String kPath = "";
 
 final GoRouter router = GoRouter(
@@ -68,6 +75,7 @@ final GoRouter router = GoRouter(
         default:
       }
     }
+    print("path:$path");
     return path;
   },
   routes: [
@@ -117,6 +125,32 @@ final GoRouter router = GoRouter(
       path: kEditProfilePath,
       pageBuilder: (context, state) => const MaterialPage(
         child: EditProfilePage(),
+      ),
+    ),
+    GoRoute(
+      path: kPassResetConfirmPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: PassResetConfirmScreen(),
+      ),
+    ),
+    GoRoute(
+      path: kPassResetAuthPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: ResetAuthScreen(
+          isPassReset: true,
+        ),
+      ),
+    ),
+    GoRoute(
+      path: kEmailResetConfirmPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: EmailResetConfirmScreen(),
+      ),
+    ),
+    GoRoute(
+      path: kEmailResetAuthPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: ResetAuthScreen(isPassReset: false),
       ),
     ),
   ],
