@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -31,12 +32,13 @@ class ProfilePage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage(
-                      currentUser?.userIcon ?? "assets/images/unknown.png"),
+                  backgroundImage: CachedNetworkImageProvider(
+                      currentUser?.userIcon ??
+                          "https://placehold.jp/150x150.png"),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    context.go(kEditProfilePath);
+                    context.push(kEditProfilePath);
                   },
                   child: Text("プロフィール編集"),
                 ),
@@ -57,6 +59,10 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(width: 10),
               Text("${currentUser?.follower}フォロワー"),
               const Spacer(),
+            ],
+          ),
+          Row(
+            children: [
               ElevatedButton(
                 onPressed: () {},
                 child: Text("メールアドレスを変更"),

@@ -46,7 +46,9 @@ class EditProfilePage extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () async {
-                            await model.updateUserInfo();
+                            await model
+                                .updateUserInfo()
+                                .then((value) => context.pop());
                           },
                           child: const Text("完了"),
                         ),
