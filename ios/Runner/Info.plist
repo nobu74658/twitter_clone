@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+		<string>プロフィール画像とアプリ内コンテンツの投稿のためにアルバムへのアクセス許可を求めます</string>
+	<key>NSCameraUsageDescription</key>
+		<string>プロフィール画像とアプリ内コンテンツの投稿のためにカメラへのアクセス許可を求めます</string>
 </dict>
 </plist>
