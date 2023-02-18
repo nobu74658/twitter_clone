@@ -10,6 +10,9 @@ class PrimaryTextField extends StatelessWidget {
     this.readOnly = false,
     this.isEdit = false,
     this.suffixIcon,
+    this.isMultiLine = false,
+    this.maxLines = 1,
+    this.height = 36,
   });
 
   final String? hintText;
@@ -17,6 +20,9 @@ class PrimaryTextField extends StatelessWidget {
   final bool readOnly;
   final bool isEdit;
   final Widget? suffixIcon;
+  final bool? isMultiLine;
+  final int? maxLines;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -26,33 +32,27 @@ class PrimaryTextField extends StatelessWidget {
       children: [
         isEdit ? Text(hintText ?? "") : const Text(""),
         SizedBox(
-          height: 36,
+          height: height,
           child: TextFormField(
+            maxLines: maxLines,
             controller: controller,
             readOnly: readOnly,
+            keyboardType: isMultiLine == true ? TextInputType.multiline : null,
             style: const TextStyle(color: Colors.lightBlue),
             decoration: InputDecoration(
+              border: isMultiLine == true ? const OutlineInputBorder() : null,
               suffixIcon: suffixIcon,
-              focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                color: Colors.black12,
-              )),
+              focusColor: isMultiLine == true ? Colors.grey : null,
+              focusedBorder: isMultiLine == true
+                  ? OutlineInputBorder()
+                  : const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                      color: Colors.black12,
+                    )),
               hintText: hintText,
             ),
             onChanged: (change) {
               loginViewModel.validation();
-              // if (change == "") {
-              //   // isEdit = false;
-              //   setState(() {
-              //     print(widget.controller?.text);
-              //   });
-              // } else {
-              //   isEdit = true;
-              //   setState(() {
-              //     print(widget.controller?.text);
-              // }
-              // );
-              // }
             },
           ),
         ),

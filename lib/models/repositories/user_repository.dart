@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:image_picker/image_picker.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
+import 'package:uuid/uuid.dart';
 
 class UserRepository {
   UserRepository({required this.dbManager});
@@ -93,9 +97,45 @@ class UserRepository {
         userId: firebaseUser.uid,
         userName: firebaseUser.displayName ?? "unknown",
         email: firebaseUser.email,
-        bio: "",
+        bio: "ここに自己紹介を表示することができます。",
         follow: 0,
         follower: 0,
         createdAt: DateTime.now());
+  }
+
+  // 画像を取得する
+  Future<File?> pickImage({required bool isFromGallery}) async {
+    final imagePicker = ImagePicker();
+
+    if (isFromGallery) {
+      final pickedImage =
+          await imagePicker.pickImage(source: ImageSource.gallery);
+      return (pickedImage != null) ? File(pickedImage.path) : null;
+    } else {
+      final pickedImage =
+          await imagePicker.pickImage(source: ImageSource.camera);
+      return (pickedImage != null) ? File(pickedImage.path) : null;
+    }
+  }
+
+  // ユーザー情報を変更する
+  Future<void> updateUserInfo(
+      {required File? imageFile,
+      required String? userName,
+      required String? bio}) async {
+    final storageId = Uuid().v1();
+    String? imageUrl;
+    if (imageFile != null) {
+      imageUrl = await dbManager.uploadImageToStorage(imageFile, storageId);
+    }
+    User newUserInfo = currentUser!.copyWith(
+      userIcon: imageUrl,
+      userName: userName,
+      bio: bio,
+      updatedAt: DateTime.now(),
+    );
+    print("repository: $newUserInfo");
+
+    await dbManager.updateUserInfo(newUserInfo);
   }
 }
