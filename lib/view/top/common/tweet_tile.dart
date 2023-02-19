@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/utils/formatter.dart';
+import 'package:twitter_clone/utils/path.dart';
+import 'package:twitter_clone/view/top/common/user_circle_icon.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TweetTile extends StatelessWidget {
@@ -28,7 +31,7 @@ class TweetTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _leftSide(user?.userIcon),
+              _leftSide(context, user?.userIcon, user?.userId),
               const SizedBox(width: 10),
               _rightSide(user?.userName),
             ],
@@ -43,12 +46,13 @@ class TweetTile extends StatelessWidget {
     return await userViewModel.getUserInfoById(tweet.userId);
   }
 
-  _leftSide(String? userIcon) {
-    return CircleAvatar(
+  _leftSide(BuildContext context, String? userIcon, String? userId) {
+    return UserCircleIcon(
+      userIcon: userIcon,
       radius: 18,
-      backgroundImage: CachedNetworkImageProvider(
-        userIcon ?? "https://placehold.jp/150x150.png",
-      ),
+      onPressed: () {
+        context.push("$kOtherUserPath/$userId");
+      },
     );
   }
 
