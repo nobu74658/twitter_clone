@@ -24,6 +24,10 @@ class TopScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return Consumer<PageViewModel>(builder: (context, model, child) {
             return Scaffold(
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {},
+                child: const Icon(Icons.add),
+              ),
               body: pages[model.currentIndex],
               bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
