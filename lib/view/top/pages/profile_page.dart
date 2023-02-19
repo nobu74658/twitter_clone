@@ -16,11 +16,10 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const Align(
             alignment: Alignment.topRight,
-            child: SignOutTextButton(),
           ),
           const SizedBox(
             height: 20,
@@ -36,12 +35,7 @@ class ProfilePage extends StatelessWidget {
                       currentUser?.userIcon ??
                           "https://placehold.jp/150x150.png"),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.push(kEditProfilePath);
-                  },
-                  child: Text("プロフィール編集"),
-                ),
+                SignOutTextButton(),
               ],
             ),
           ),
@@ -52,6 +46,13 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(currentUser?.bio ?? "プロフィール文章が未設定です"),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              context.push(kEditProfilePath);
+            },
+            child: Text("プロフィール編集"),
+          ),
           const SizedBox(height: 10),
           Row(
             children: [

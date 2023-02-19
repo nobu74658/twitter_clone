@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/utils/path.dart';
+import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/top/pages/time_line_page.dart';
 import 'package:twitter_clone/view/top/pages/like_page.dart';
 import 'package:twitter_clone/view/top/pages/profile_page.dart';
@@ -25,6 +26,9 @@ class TopScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return Consumer<PageViewModel>(builder: (context, model, child) {
             return Scaffold(
+              appBar: PrimaryAppBar(
+                appBar: AppBar(),
+              ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   context.push(kPostTweetPath);
