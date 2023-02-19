@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:uuid/uuid.dart';
