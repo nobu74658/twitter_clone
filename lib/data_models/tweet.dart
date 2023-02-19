@@ -63,7 +63,7 @@ class Tweet {
 
   Map<String, dynamic> toMap() {
     return {
-      'postId': this.tweetId,
+      'tweetId': this.tweetId,
       'userId': this.userId,
       'favorite': this.favorite,
       'desc': this.desc,
