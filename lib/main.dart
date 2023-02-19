@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
