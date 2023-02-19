@@ -11,6 +11,7 @@ import 'package:twitter_clone/view/sign_in_up/screens/register_confirm_screen.da
 import 'package:twitter_clone/view/sign_in_up/screens/auth_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/reset_auth_screen.dart';
 import 'package:twitter_clone/view/top/pages/edit_profile_page.dart';
+import 'package:twitter_clone/view/top/pages/follow_follower_page.dart';
 import 'package:twitter_clone/view/top/pages/post_tweet_page.dart';
 import 'package:twitter_clone/view/top/screens/top_screen.dart';
 
@@ -27,6 +28,8 @@ const String kPassResetAuthPath = "/pass-reset-auth";
 const String kEmailResetConfirmPath = "/email-reset-confirm";
 const String kEmailResetAuthPath = "/email-reset-auth";
 const String kPostTweetPath = "/post-tweet";
+const String kFollowPath = "/follow";
+const String kFollowerPath = "/follower";
 const String kPath = "";
 
 final GoRouter router = GoRouter(
@@ -159,6 +162,18 @@ final GoRouter router = GoRouter(
       path: kPostTweetPath,
       pageBuilder: (context, state) => const MaterialPage(
         child: PostTweetPage(),
+      ),
+    ),
+    GoRoute(
+      path: kFollowPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: FollowFollowerPage(),
+      ),
+    ),
+    GoRoute(
+      path: kFollowerPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: FollowFollowerPage(isFollow: false),
       ),
     ),
   ],

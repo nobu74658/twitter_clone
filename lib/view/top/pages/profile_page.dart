@@ -55,12 +55,20 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              Text("${currentUser?.follow}フォロー中"),
+              _followFolowedButton(
+                isFollow: false,
+                num: currentUser?.follow,
+                onPressed: () => context.push(kFollowPath),
+              ),
               const SizedBox(width: 10),
-              Text("${currentUser?.follower}フォロワー"),
+              _followFolowedButton(
+                num: currentUser?.follower,
+                onPressed: () => context.push(kFollowerPath),
+              ),
               const Spacer(),
             ],
           ),
+          const SizedBox(height: 6),
           Row(
             children: [
               ElevatedButton(
@@ -77,9 +85,23 @@ class ProfilePage extends StatelessWidget {
                 child: Text("パスワードを変更"),
               ),
             ],
-          )
+          ),
         ],
       ),
+    );
+  }
+
+  _followFolowedButton({
+    required int? num,
+    required VoidCallback onPressed,
+    bool isFollow = true,
+  }) {
+    return TextButton(
+      style: ButtonStyle(
+        foregroundColor: MaterialStatePropertyAll(Colors.black),
+      ),
+      onPressed: onPressed,
+      child: Text(isFollow ? "$numフォロー中" : "$numフォロー"),
     );
   }
 }
