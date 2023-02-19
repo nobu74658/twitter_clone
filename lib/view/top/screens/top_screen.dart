@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/top/pages/time_line_page.dart';
 import 'package:twitter_clone/view/top/pages/like_page.dart';
 import 'package:twitter_clone/view/top/pages/profile_page.dart';
@@ -20,12 +22,13 @@ class TopScreen extends StatelessWidget {
     return FutureBuilder(
       future: _future(context),
       builder: (context, snapshot) {
-        print(snapshot);
         if (snapshot.connectionState == ConnectionState.done) {
           return Consumer<PageViewModel>(builder: (context, model, child) {
             return Scaffold(
               floatingActionButton: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(kPostTweetPath);
+                },
                 child: const Icon(Icons.add),
               ),
               body: pages[model.currentIndex],
@@ -62,8 +65,6 @@ class TopScreen extends StatelessWidget {
 
   Future<void> _future(BuildContext context) async {
     final userViewModel = context.read<UserViewModel>();
-    print("future: ${userViewModel.currentUser}");
     await userViewModel.getCurrentUser();
-    print("future: ${userViewModel.currentUser}");
   }
 }
