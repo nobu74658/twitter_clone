@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 class PrimaryAppBar extends StatelessWidget implements PreferredSizeWidget {
   const PrimaryAppBar(
-      {super.key, required this.appBar, this.leading, this.leadingWidth = 50});
+      {super.key,
+      required this.appBar,
+      this.leading,
+      this.leadingWidth = 50,
+      this.actions});
 
   final AppBar appBar;
   final Widget? leading;
   final double leadingWidth;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,7 @@ class PrimaryAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leadingWidth: leadingWidth,
       leading: leading,
+      actions: actions,
     );
   }
 

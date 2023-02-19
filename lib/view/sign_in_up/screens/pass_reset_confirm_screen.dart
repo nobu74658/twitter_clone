@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/common/components/firebase_error.dart';
+import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/common/components/primary_button.dart';
 import 'package:twitter_clone/view/common/components/primary_text_field.dart';
@@ -16,7 +17,7 @@ class PassResetConfirmScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PrimaryAppBar(
-        leading: _textButton(context),
+        leading: LeadingCancelButton(context),
         leadingWidth: 100,
         appBar: AppBar(),
       ),
