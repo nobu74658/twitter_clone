@@ -43,4 +43,8 @@ class DatabaseManager {
     return uploadTask
         .then((TaskSnapshot snapshot) => snapshot.ref.getDownloadURL());
   }
+
+  Future<void> updateEmail(User user) async {
+    _db.collection("users").doc(user.userId).update(user.toMap());
+  }
 }

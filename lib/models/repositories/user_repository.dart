@@ -146,6 +146,11 @@ class UserRepository {
 
   // メールアドレスを変更
   Future<void> emailReset(String email) async {
-    await _auth.currentUser!.updateEmail(email);
+    await _auth.currentUser!.updateEmail(email).then((value) async {
+      User user = currentUser!.copyWith(
+        email: email,
+      );
+      await dbManager.updateEmail(user);
+    });
   }
 }

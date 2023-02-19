@@ -60,6 +60,7 @@ class SignInUpViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // パスワードを変更
   Future<void> passReset() async {
     isProcessing = true;
     notifyListeners();
@@ -77,6 +78,7 @@ class SignInUpViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // メールアドレスを変更
   Future<void> emailReset() async {
     isProcessing = true;
     notifyListeners();

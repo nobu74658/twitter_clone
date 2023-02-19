@@ -41,7 +41,9 @@ class EmailResetConfirmScreen extends StatelessWidget {
                     text: "メールアドレスを変更",
                     onPressed: () async {
                       try {
-                        await model.emailReset();
+                        await model
+                            .emailReset()
+                            .then((value) => context.go(kInitialPath));
                       } on FirebaseAuthException catch (e) {
                         EM.firebaseAuth(context, e.code);
                       } catch (e) {
