@@ -153,4 +153,9 @@ class UserRepository {
       await dbManager.updateEmail(user);
     });
   }
+
+  // userIdを返す、tweet_view_modelで使用
+  String printUserId() {
+    return currentUser!.userId;
+  }
 }

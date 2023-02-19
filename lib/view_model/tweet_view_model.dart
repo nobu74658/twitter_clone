@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:twitter_clone/models/repositories/tweet_repository.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 
 class TweetViewModel extends ChangeNotifier {
-  TweetViewModel({required this.userRepository})
-      : descController = TextEditingController();
+  TweetViewModel({
+    required this.userRepository,
+    required this.tweetRepository,
+  }) : descController = TextEditingController();
 
   final UserRepository userRepository;
+  final TweetRepository tweetRepository;
   bool isProcessing = false;
   TextEditingController descController;
 
   Future<void> postTweet() async {
     isProcessing = true;
     notifyListeners();
+
+    final desc = descController.text;
+    descController.clear();
+
+    await tweetRepository.postTweet(
+      userId: userRepository.printUserId(),
+      desc: desc,
+    );
 
     isProcessing = false;
     notifyListeners();
