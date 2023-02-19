@@ -2,9 +2,7 @@ class Tweet {
   String tweetId;
   String userId;
   int favorite;
-  String caption;
-  String? userIcon;
-  String userName;
+  String desc;
   DateTime postDateTime;
 
 //<editor-fold desc="Data Methods">
@@ -13,9 +11,7 @@ class Tweet {
     required this.tweetId,
     required this.userId,
     required this.favorite,
-    required this.caption,
-    this.userIcon,
-    required this.userName,
+    required this.desc,
     required this.postDateTime,
   });
 
@@ -27,9 +23,7 @@ class Tweet {
           tweetId == other.tweetId &&
           userId == other.userId &&
           favorite == other.favorite &&
-          caption == other.caption &&
-          userIcon == other.userIcon &&
-          userName == other.userName &&
+          desc == other.desc &&
           postDateTime == other.postDateTime);
 
   @override
@@ -37,9 +31,7 @@ class Tweet {
       tweetId.hashCode ^
       userId.hashCode ^
       favorite.hashCode ^
-      caption.hashCode ^
-      userIcon.hashCode ^
-      userName.hashCode ^
+      desc.hashCode ^
       postDateTime.hashCode;
 
   @override
@@ -48,9 +40,7 @@ class Tweet {
         ' tweetId: $tweetId,' +
         ' userId: $userId,' +
         ' favorite: $favorite,' +
-        ' caption: $caption,' +
-        ' userIcon: $userIcon,' +
-        ' userName: $userName,' +
+        ' desc: $desc,' +
         ' postDateTime: $postDateTime,' +
         '}';
   }
@@ -59,18 +49,14 @@ class Tweet {
     String? postId,
     String? userId,
     int? favorite,
-    String? caption,
-    String? userIcon,
-    String? userName,
+    String? desc,
     DateTime? postDateTime,
   }) {
     return Tweet(
       tweetId: postId ?? this.tweetId,
       userId: userId ?? this.userId,
       favorite: favorite ?? this.favorite,
-      caption: caption ?? this.caption,
-      userIcon: userIcon ?? this.userIcon,
-      userName: userName ?? this.userName,
+      desc: desc ?? this.desc,
       postDateTime: postDateTime ?? this.postDateTime,
     );
   }
@@ -80,9 +66,7 @@ class Tweet {
       'postId': this.tweetId,
       'userId': this.userId,
       'favorite': this.favorite,
-      'caption': this.caption,
-      'userIcon': this.userIcon,
-      'userName': this.userName,
+      'desc': this.desc,
       'postDateTime': this.postDateTime.toIso8601String(),
     };
   }
@@ -92,9 +76,7 @@ class Tweet {
       tweetId: map['tweetId'] as String,
       userId: map['userId'] as String,
       favorite: map['favorite'] as int,
-      caption: map['caption'] as String,
-      userIcon: map['userIcon'] as String?,
-      userName: map['userName'] as String,
+      desc: map['desc'] as String,
       postDateTime: DateTime.parse(map['postDateTime'] as String),
     );
   }
