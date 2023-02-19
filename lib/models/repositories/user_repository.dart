@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:uuid/uuid.dart';
@@ -104,10 +106,13 @@ class UserRepository {
         createdAt: DateTime.now());
   }
 
+  // TODO: web版でもimage_picker_webで画像取得できるようにする
   // 画像を取得する
   Future<File?> pickImage({required bool isFromGallery}) async {
+    if (kIsWeb) {
+      return null;
+    }
     final imagePicker = ImagePicker();
-
     if (isFromGallery) {
       final pickedImage =
           await imagePicker.pickImage(source: ImageSource.gallery);
