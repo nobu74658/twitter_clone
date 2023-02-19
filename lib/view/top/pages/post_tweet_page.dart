@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
@@ -20,7 +21,7 @@ class PostTweetPage extends StatelessWidget {
         actions: [
           ElevatedButton(
             onPressed: () async {
-              await tweetViewModel.postTweet();
+              await tweetViewModel.postTweet().then((value) => context.pop());
               tweetViewModel.endProcess();
             },
             child: Text("ツイートする"),
