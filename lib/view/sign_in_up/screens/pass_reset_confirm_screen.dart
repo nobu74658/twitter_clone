@@ -66,17 +66,4 @@ class PassResetConfirmScreen extends StatelessWidget {
       color: Colors.green,
     );
   }
-
-  _textButton(BuildContext context) {
-    return TextButton(
-      style:
-          ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.black)),
-      child: const Text(
-        "キャンセル",
-      ),
-      onPressed: () {
-        context.pop();
-      },
-    );
-  }
 }
