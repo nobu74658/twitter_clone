@@ -79,11 +79,12 @@ class UserRepository {
       return await dbManager.getUserInfoFromDbById(userId);
     } else {
       return User(
-          userId: userId,
-          userName: "unknown",
-          follow: 0,
-          follower: 0,
-          createdAt: DateTime.now());
+        userId: userId,
+        userName: "unknown",
+        follow: 0,
+        follower: 0,
+        createdAt: DateTime.now(),
+      );
     }
   }
 
@@ -134,7 +135,7 @@ class UserRepository {
       bio: bio,
       updatedAt: DateTime.now(),
     );
-    print("repository: $newUserInfo");
+    currentUser = newUserInfo;
 
     await dbManager.updateUserInfo(newUserInfo);
   }
