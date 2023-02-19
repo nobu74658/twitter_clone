@@ -31,7 +31,7 @@ const String kEmailResetAuthPath = "/email-reset-auth";
 const String kPostTweetPath = "/post-tweet";
 const String kFollowPath = "/follow";
 const String kFollowerPath = "/follower";
-const String kOtherUserPath = "/other-user:user_id";
+const String kOtherUserPath = "/other-user";
 const String kPath = "";
 
 final GoRouter router = GoRouter(
@@ -179,7 +179,7 @@ final GoRouter router = GoRouter(
       ),
     ),
     GoRoute(
-      path: kOtherUserPath,
+      path: "$kOtherUserPath/:user_id",
       pageBuilder: (context, state) {
         String? userId = state.params['user_id'];
         return MaterialPage(
