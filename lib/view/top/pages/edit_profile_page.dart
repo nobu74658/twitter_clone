@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter_clone/utils/path.dart';
-import 'package:twitter_clone/view/common/components/primary_button.dart';
 import 'package:twitter_clone/view/common/components/primary_text_field.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
