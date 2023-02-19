@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PageViewModel extends ChangeNotifier {
-  PageViewModel() : currentIndex = 2;
+  PageViewModel() : currentIndex = 0;
 
   int currentIndex;
 

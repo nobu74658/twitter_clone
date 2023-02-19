@@ -19,10 +19,12 @@ class UserViewModel extends ChangeNotifier {
 
   bool isProcessing = false;
 
+  // 現在のログインユーザーの情報を取得
   Future<void> getCurrentUser() async {
     await userRepository.getCurrentUser();
   }
 
+  // 画像取得
   Future<void> getImage({required bool isFromGallery}) async {
     isImagePicked = false;
     isProcessing = true;
@@ -35,6 +37,7 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ユーザープロフィールの編集
   Future<void> updateUserInfo() async {
     isProcessing = true;
     notifyListeners();
@@ -46,5 +49,10 @@ class UserViewModel extends ChangeNotifier {
 
     isProcessing = false;
     notifyListeners();
+  }
+
+  // userIdから他ユーザーの情報を取得
+  Future<User> getUserInfoById(String userId) async {
+    return await userRepository.getUserInfoById(userId);
   }
 }

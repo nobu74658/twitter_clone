@@ -1,64 +1,66 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/data_models/tweet.dart';
+import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/utils/formatter.dart';
+import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TweetTile extends StatelessWidget {
-  const TweetTile({super.key});
+  const TweetTile({super.key, required this.tweet});
+
+  final Tweet tweet;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border.symmetric(
-          horizontal: BorderSide(color: Colors.black12),
-        ),
-      ),
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _leftSide(),
-          const SizedBox(width: 10),
-          _rightSide(),
-        ],
+    return FutureBuilder(
+      future: _future(context),
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        print("tweet_tile: $user");
+        return Container(
+          decoration: const BoxDecoration(
+            border: Border.symmetric(
+              horizontal: BorderSide(color: Colors.black12),
+            ),
+          ),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _leftSide(user?.userIcon),
+              const SizedBox(width: 10),
+              _rightSide(user?.userName),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<User> _future(BuildContext context) async {
+    final userViewModel = context.read<UserViewModel>();
+    return await userViewModel.getUserInfoById(tweet.userId);
+  }
+
+  _leftSide(String? userIcon) {
+    return CircleAvatar(
+      radius: 18,
+      backgroundImage: CachedNetworkImageProvider(
+        userIcon ?? "https://placehold.jp/150x150.png",
       ),
     );
   }
 
-  _leftSide() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Icon(
-          Icons.favorite,
-          color: Colors.grey,
-          size: 16,
-        ),
-        const SizedBox(height: 6),
-        CircleAvatar(
-          radius: 18,
-          backgroundImage:
-              CachedNetworkImageProvider("https://placehold.jp/150x150.png"),
-        ),
-      ],
-    );
-  }
-
-  _rightSide() {
+  _rightSide(String? userName) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "hirokiさんがいいねしました",
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 6),
-          _postInfoPart(),
+          _postInfoPart(userName),
           const SizedBox(height: 2),
           Text(
-            "hogehhogweogihwohg" * 100,
+            tweet.desc,
             maxLines: 10,
             softWrap: true,
             style: const TextStyle(color: Colors.black54),
@@ -70,13 +72,14 @@ class TweetTile extends StatelessWidget {
     );
   }
 
-  _postInfoPart() {
+  _postInfoPart(String? userName) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "hirokiappdev",
+          userName ?? "unknown",
         ),
-        Text("2022/02/18 15:10"),
+        Text(dateFormatter.format(tweet.postDateTime)),
       ],
     );
   }
@@ -95,7 +98,7 @@ class TweetTile extends StatelessWidget {
           size: 16,
         ),
         Text(
-          "492",
+          "${tweet.favorite}",
           style: TextStyle(color: Colors.black54),
         ),
       ],
