@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/di/providers.dart';
 import 'package:twitter_clone/firebase_options.dart';
@@ -7,6 +8,8 @@ import 'package:twitter_clone/utils/path.dart';
 
 void main() async {
   WidgetsFlutterBinding();
+  initializeDateFormatting("ja_JP");
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
