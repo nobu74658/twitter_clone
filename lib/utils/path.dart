@@ -183,7 +183,7 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) {
         String? userId = state.params['user_id'];
         return MaterialPage(
-          child: OtherUserPage(userId: userId),
+          child: OtherUserPage(otherUserId: userId),
         );
       },
     ),
