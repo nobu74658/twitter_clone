@@ -22,6 +22,7 @@ class UserViewModel extends ChangeNotifier {
   // 現在のログインユーザーの情報を取得
   Future<void> getCurrentUser() async {
     await userRepository.getCurrentUser();
+    isProcessing = false;
   }
 
   // 画像取得
@@ -68,12 +69,12 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<User>> getFollowUsers() async {
+  Future<List<User>?> getFollowUsers() async {
     final users = await userRepository.getFollowUsers();
     return users;
   }
 
-  Future<List<User>> getFollowers() async {
+  Future<List<User>?> getFollowers() async {
     final users = await userRepository.getFollowers();
     return users;
   }

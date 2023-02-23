@@ -35,14 +35,14 @@ class ProfilePage extends StatelessWidget {
                       currentUser?.userIcon ??
                           "https://placehold.jp/150x150.png"),
                 ),
-                SignOutTextButton(),
+                const SignOutTextButton(),
               ],
             ),
           ),
           const SizedBox(height: 10),
           Text(
             currentUser?.userName ?? "unknown",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           Text(currentUser?.bio ?? "プロフィール文章が未設定です"),
@@ -51,20 +51,20 @@ class ProfilePage extends StatelessWidget {
             onPressed: () {
               context.push(kEditProfilePath);
             },
-            child: Text("プロフィール編集"),
+            child: const Text("プロフィール編集"),
           ),
           const SizedBox(height: 10),
           Row(
             children: [
               _followFolowedButton(
-                isFollow: false,
+                context: context,
                 num: currentUser?.follow,
-                onPressed: () => context.push(kFollowPath),
               ),
               const SizedBox(width: 10),
               _followFolowedButton(
+                context: context,
+                isFollow: false,
                 num: currentUser?.follower,
-                onPressed: () => context.push(kFollowerPath),
               ),
               const Spacer(),
             ],
@@ -76,14 +76,14 @@ class ProfilePage extends StatelessWidget {
                 onPressed: () {
                   context.push(kEmailResetAuthPath);
                 },
-                child: Text("メールアドレスを変更"),
+                child: const Text("メールアドレスを変更"),
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               ElevatedButton(
                 onPressed: () {
                   context.push(kPassResetAuthPath);
                 },
-                child: Text("パスワードを変更"),
+                child: const Text("パスワードを変更"),
               ),
             ],
           ),
@@ -93,16 +93,16 @@ class ProfilePage extends StatelessWidget {
   }
 
   _followFolowedButton({
+    required BuildContext context,
     required int? num,
-    required VoidCallback onPressed,
     bool isFollow = true,
   }) {
     return TextButton(
-      style: ButtonStyle(
+      style: const ButtonStyle(
         foregroundColor: MaterialStatePropertyAll(Colors.black),
       ),
-      onPressed: onPressed,
-      child: Text(isFollow ? "$numフォロー中" : "$numフォロー"),
+      onPressed: () => context.push(isFollow ? kFollowPath : kFollowerPath),
+      child: Text(isFollow ? "$numフォロー中" : "$numフォロワー"),
     );
   }
 }

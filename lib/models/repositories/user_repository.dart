@@ -55,6 +55,7 @@ class UserRepository {
       if (!isUserExistedInDb) {
         await dbManager.insertUser(_convertToUser(firebaseUser));
       }
+      await getFollowFollowerNum(firebaseUser.uid);
       currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
     }
   }
@@ -62,6 +63,7 @@ class UserRepository {
   // サインアウト
   Future<void> signOut() async {
     await _auth.signOut();
+    currentUser = null;
   }
 
   // ユーザー自身の情報を取得
@@ -168,15 +170,20 @@ class UserRepository {
     await dbManager.followUser(currentUser!.userId, otherUserId);
   }
 
-  Future<List<User>> getFollowUsers() async {
+  Future<List<User>?> getFollowUsers() async {
     return await dbManager.getFollowUsers(currentUser!.userId);
   }
 
-  Future<List<User>> getFollowers() async {
+  Future<List<User>?> getFollowers() async {
     return await dbManager.getFollowers(currentUser!.userId);
   }
 
   Future<void> deleteFollowUser(String otherUserId) async {
     await dbManager.deleteFollowUser(currentUser!.userId, otherUserId);
+  }
+
+  // フォロー、フォロワーの数を取得してくる
+  Future<void> getFollowFollowerNum(String userId) async {
+    await dbManager.getFollowFollowerNum(userId);
   }
 }

@@ -3,16 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
-import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
-import 'package:twitter_clone/view/top/common/tweet_tile.dart';
+import 'package:twitter_clone/view/top/components/tweet_tile.dart';
+import 'package:twitter_clone/view_model/follow_unfollow_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class OtherUserPage extends StatelessWidget {
-  const OtherUserPage({super.key, required this.userId});
+  const OtherUserPage({super.key, required this.otherUserId});
 
-  final String? userId;
+  final String? otherUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -25,103 +25,138 @@ class OtherUserPage extends StatelessWidget {
       body: FutureBuilder(
         future: _future(context),
         builder: (context, snapshot) {
-          final user = snapshot.data;
-          return StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("tweets")
-                .where("userId", isEqualTo: userId)
-                .orderBy("postDateTime", descending: true)
-                .snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              print("streamBuilder: fired in time_line_page");
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return Center(
-                  child: Column(
-                    children: const [
-                      Icon(Icons.flutter_dash),
-                      Text("不明なエラーが発生しました"),
-                    ],
-                  ),
-                );
-              }
-              final docs = snapshot.data!.docs;
-              return ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                itemCount: docs.length + 6,
-                itemBuilder: (context, index) {
-                  if (index < 6) {
-                    return [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      user?.userIcon ??
-                                          "https://placehold.jp/150x150.png"),
+          if (snapshot.connectionState == ConnectionState.done) {
+            final otherUser = snapshot.data?["otherUser"];
+            bool? isFollowed = snapshot.data?["isFollowed"];
+            return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("tweets")
+                  .where("userId", isEqualTo: otherUserId)
+                  .orderBy("postDateTime", descending: true)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                print("streamBuilder: fired in time_line_page");
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Column(
+                      children: const [
+                        Icon(Icons.flutter_dash),
+                        Text("不明なエラーが発生しました"),
+                      ],
+                    ),
+                  );
+                }
+                final docs = snapshot.data!.docs;
+                return ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  itemCount: docs.length + 6,
+                  itemBuilder: (context, index) {
+                    if (index < 6) {
+                      return [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        otherUser?.userIcon ??
+                                            "https://placehold.jp/150x150.png"),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                user?.userName ?? "unknown",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: Text("フォローする"),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Text(user?.bio ?? ""),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          _followFolowedButton(
-                            onPressed: () {},
-                            isFollow: false,
-                            num: user?.follow,
-                          ),
-                          const SizedBox(width: 10),
-                          _followFolowedButton(
-                            onPressed: () {},
-                            num: user?.follower,
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      const Divider()
-                    ][index];
-                  } else {
-                    final data = docs[index - 6].data() as Map<String, dynamic>;
-                    final tweet = Tweet.fromMap(data);
-                    return TweetTile(tweet: tweet);
-                  }
-                },
-              );
-            },
+                                const SizedBox(width: 10),
+                                Text(
+                                  otherUser?.userName ?? "unknown",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            Consumer<FollowUnFollowViewModel>(
+                              builder: (context, model, child) {
+                                return ElevatedButton(
+                                  onPressed: () async {
+                                    final userViewModel =
+                                        context.read<UserViewModel>();
+                                    await userViewModel
+                                        .followUnFollowUser(otherUserId!,
+                                            model.isFollowed == true)
+                                        .then(
+                                          (value) => model.changeIsFollow(
+                                              !model.isFollowed),
+                                        );
+                                  },
+                                  child: Text(model.isFollowed == true
+                                      ? "フォロー解除"
+                                      : "フォローする"),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(otherUser?.bio ?? ""),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            _followFolowedButton(
+                              onPressed: null,
+                              num: otherUser?.follow,
+                            ),
+                            const SizedBox(width: 10),
+                            _followFolowedButton(
+                              onPressed: null,
+                              num: otherUser?.follower,
+                              isFollow: false,
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        const Divider()
+                      ][index];
+                    } else {
+                      final data =
+                          docs[index - 6].data() as Map<String, dynamic>;
+                      final tweet = Tweet.fromMap(data);
+                      return TweetTile(tweet: tweet);
+                    }
+                  },
+                );
+              },
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),
     );
   }
 
-  Future<User> _future(BuildContext context) async {
+  Future<Map<String, dynamic>> _future(BuildContext context) async {
     final userViewModel = context.read<UserViewModel>();
-    return await userViewModel.getUserInfoById(userId ?? "");
+    final followUnFollowViewModel = context.read<FollowUnFollowViewModel>();
+    final followUsers = await userViewModel.getFollowUsers();
+    final otherUser = await userViewModel.getUserInfoById(otherUserId ?? "");
+    bool isFollowed = false;
+    if (followUsers != null) {
+      if (followUsers.contains(otherUser)) {
+        isFollowed = true;
+      }
+    }
+    followUnFollowViewModel.changeIsFollow(isFollowed);
+    print("otherUser$otherUser");
+    return {"otherUser": otherUser, "isFollowed": isFollowed};
   }
 
   _followFolowedButton({
@@ -135,7 +170,7 @@ class OtherUserPage extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: Text(
-        isFollow ? "$numフォロー中" : "$numフォロー",
+        isFollow ? "$numフォロー中" : "$numフォロワー",
       ),
     );
   }

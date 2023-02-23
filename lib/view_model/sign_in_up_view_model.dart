@@ -17,7 +17,6 @@ class SignInUpViewModel extends ChangeNotifier {
 
   /// メールアドレスでログイン・新規アカウント登録
   Future<bool?> signInUp({bool isRegister = true}) async {
-    print("signInUp in view model");
     isProcessing = true;
     notifyListeners();
 
