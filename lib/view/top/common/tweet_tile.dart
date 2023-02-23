@@ -1,4 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,12 +8,14 @@ import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/utils/formatter.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/top/common/user_circle_icon.dart';
+import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TweetTile extends StatelessWidget {
-  const TweetTile({super.key, required this.tweet});
+  const TweetTile({super.key, required this.tweet, this.currentUserId});
 
   final Tweet tweet;
+  final String? currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,6 @@ class TweetTile extends StatelessWidget {
       future: _future(context),
       builder: (context, snapshot) {
         final user = snapshot.data;
-        print("tweet_tile: $user");
         return Container(
           decoration: const BoxDecoration(
             border: Border.symmetric(
@@ -33,7 +35,7 @@ class TweetTile extends StatelessWidget {
             children: [
               _leftSide(context, user?.userIcon, user?.userId),
               const SizedBox(width: 10),
-              _rightSide(user?.userName),
+              _rightSide(user?.userName, context),
             ],
           ),
         );
@@ -56,12 +58,12 @@ class TweetTile extends StatelessWidget {
     );
   }
 
-  _rightSide(String? userName) {
+  _rightSide(String? userName, BuildContext context) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _postInfoPart(userName),
+          _postInfoPart(userName, context),
           const SizedBox(height: 2),
           Text(
             tweet.desc,
@@ -76,14 +78,35 @@ class TweetTile extends StatelessWidget {
     );
   }
 
-  _postInfoPart(String? userName) {
+  _postInfoPart(String? userName, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          userName ?? "unknown",
+        Row(
+          children: [
+            Text(
+              userName ?? "unknown",
+            ),
+            const SizedBox(width: 20),
+            Text(dateFormatter.format(tweet.postDateTime)),
+          ],
         ),
-        Text(dateFormatter.format(tweet.postDateTime)),
+        currentUserId == tweet.userId
+            ? IconButton(
+                icon: const Icon(Icons.more_horiz),
+                onPressed: () async {
+                  final tweetViewModel = context.read<TweetViewModel>();
+                  await tweetViewModel.deleteTweet(tweet.tweetId).then(
+                        (value) => showBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return const Text("ツイートが削除されました。");
+                          },
+                        ),
+                      );
+                },
+              )
+            : Container(),
       ],
     );
   }

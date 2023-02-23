@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/view/top/common/tweet_tile.dart';
+import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TimeLinePage extends StatelessWidget {
   const TimeLinePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userViewModel = context.read<UserViewModel>();
+    final currentUser = userViewModel.currentUser!;
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -15,7 +19,6 @@ class TimeLinePage extends StatelessWidget {
             .orderBy("postDateTime", descending: true)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          print("streamBuilder: fired in time_line_page");
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -38,7 +41,10 @@ class TimeLinePage extends StatelessWidget {
             itemBuilder: (context, index) {
               final data = docs[index].data() as Map<String, dynamic>;
               final tweet = Tweet.fromMap(data);
-              return TweetTile(tweet: tweet);
+              return TweetTile(
+                tweet: tweet,
+                currentUserId: currentUser.userId,
+              );
             },
           );
         },

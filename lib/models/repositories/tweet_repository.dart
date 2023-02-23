@@ -21,4 +21,8 @@ class TweetRepository {
     );
     await dbManager.insertTweet(tweet);
   }
+
+  Future<void> deleteTweet(String tweetId) async {
+    await dbManager.deleteTweet(tweetId);
+  }
 }

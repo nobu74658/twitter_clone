@@ -33,4 +33,16 @@ class TweetViewModel extends ChangeNotifier {
     isProcessing = false;
     notifyListeners();
   }
+
+  Future<void> deleteTweet(String tweetId) async {
+    isProcessing = true;
+    notifyListeners();
+
+    await tweetRepository.deleteTweet(
+      tweetId,
+    );
+
+    isProcessing = false;
+    notifyListeners();
+  }
 }
