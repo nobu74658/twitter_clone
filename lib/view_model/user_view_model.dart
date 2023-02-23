@@ -55,4 +55,26 @@ class UserViewModel extends ChangeNotifier {
   Future<User> getUserInfoById(String userId) async {
     return await userRepository.getUserInfoById(userId);
   }
+
+  Future<void> followUnFollowUser(String otherUserId, bool isFollow) async {
+    isProcessing = true;
+    notifyListeners();
+
+    isFollow
+        ? await userRepository.deleteFollowUser(otherUserId)
+        : await userRepository.followUser(otherUserId);
+
+    isProcessing = false;
+    notifyListeners();
+  }
+
+  Future<List<User>> getFollowUsers() async {
+    final users = await userRepository.getFollowUsers();
+    return users;
+  }
+
+  Future<List<User>> getFollowers() async {
+    final users = await userRepository.getFollowers();
+    return users;
+  }
 }

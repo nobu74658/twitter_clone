@@ -163,4 +163,20 @@ class UserRepository {
   String printUserId() {
     return currentUser!.userId;
   }
+
+  Future<void> followUser(String otherUserId) async {
+    await dbManager.followUser(currentUser!.userId, otherUserId);
+  }
+
+  Future<List<User>> getFollowUsers() async {
+    return await dbManager.getFollowUsers(currentUser!.userId);
+  }
+
+  Future<List<User>> getFollowers() async {
+    return await dbManager.getFollowers(currentUser!.userId);
+  }
+
+  Future<void> deleteFollowUser(String otherUserId) async {
+    await dbManager.deleteFollowUser(currentUser!.userId, otherUserId);
+  }
 }
