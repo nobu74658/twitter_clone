@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +5,8 @@ import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/utils/formatter.dart';
 import 'package:twitter_clone/utils/path.dart';
-import 'package:twitter_clone/view/top/common/user_circle_icon.dart';
+import 'package:twitter_clone/view/top/components/user_circle_icon.dart';
+import 'package:twitter_clone/view_model/page_view_model.dart';
 import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
@@ -53,7 +52,10 @@ class TweetTile extends StatelessWidget {
       userIcon: userIcon,
       radius: 18,
       onPressed: () {
-        context.push("$kOtherUserPath/$userId");
+        final pageViewModel = context.read<PageViewModel>();
+        currentUserId == userId
+            ? pageViewModel.pageTransition(2)
+            : context.push("$kOtherUserPath/$userId");
       },
     );
   }
