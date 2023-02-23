@@ -51,4 +51,9 @@ class DatabaseManager {
   Future<void> insertTweet(Tweet tweet) async {
     await _db.collection("tweets").doc(tweet.tweetId).set(tweet.toMap());
   }
+
+  // tweetをtweetIdで削除する
+  Future<void> deleteTweet(String tweetId) async {
+    await _db.collection("tweets").doc(tweetId).delete();
+  }
 }
