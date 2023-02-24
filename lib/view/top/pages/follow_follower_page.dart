@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/top/components/icon_name_tile.dart';
@@ -62,7 +63,7 @@ class FollowFollowerPage extends StatelessWidget {
     );
   }
 
-  Future<List<User>?> _future(BuildContext context) async {
+  Future<List<UserDesc>> _future(BuildContext context) async {
     final userViewModel = context.read<UserViewModel>();
     final users = isFollow
         ? await userViewModel.getFollowUsers()
