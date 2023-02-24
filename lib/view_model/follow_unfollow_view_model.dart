@@ -5,7 +5,7 @@ class FollowUnFollowViewModel extends ChangeNotifier {
   bool isFollowed;
   bool isProcessing = false;
 
-  Future<void> changeIsFollow(bool isFollowed) async {
+  void changeIsFollow(bool isFollowed) {
     isProcessing = true;
     notifyListeners();
 
