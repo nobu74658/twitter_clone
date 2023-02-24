@@ -21,7 +21,7 @@ class EditProfilePage extends StatelessWidget {
     nameController.text = userName;
     String? bio = currentUser.bio;
     final bioController = userViewModel.bioController;
-    bioController.text = bio ?? "";
+    bioController.text = bio;
 
     return Scaffold(
       body: Consumer<UserViewModel>(
