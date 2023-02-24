@@ -2,7 +2,7 @@ class User {
   final String userId;
   final String? userIcon;
   final String userName;
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
   final DateTime createdAt;
   final String? email;
   final String? bio;
@@ -15,7 +15,7 @@ class User {
     required this.userId,
     this.userIcon,
     required this.userName,
-    required this.updatedAt,
+    this.updatedAt,
     required this.createdAt,
     this.email,
     this.bio,
@@ -108,7 +108,7 @@ class User {
       userId: map['userId'] as String,
       userIcon: map['userIcon'] as String?,
       userName: map['userName'] as String,
-      updatedAt: map['updatedAt'].toDate(),
+      updatedAt: map['updatedAt']?.toDate(),
       createdAt: map['createdAt'].toDate(),
       email: map['email'] as String?,
       bio: map['bio'] as String?,
