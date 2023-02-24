@@ -15,7 +15,7 @@ class TweetRepository {
     Tweet tweet = Tweet(
       tweetId: tweetId,
       userId: userId,
-      favorite: 0,
+      favoriteNum: 0,
       desc: desc,
       createdAt: DateTime.now(),
     );

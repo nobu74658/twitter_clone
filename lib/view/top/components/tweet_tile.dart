@@ -127,7 +127,7 @@ class TweetTile extends StatelessWidget {
           size: 16,
         ),
         Text(
-          "${tweet.favorite}",
+          "${tweet.favoriteNum}",
           style: TextStyle(color: Colors.black54),
         ),
       ],
