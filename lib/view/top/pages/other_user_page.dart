@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
+import 'package:twitter_clone/utils/keys.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/top/components/tweet_tile.dart';
@@ -12,7 +13,7 @@ import 'package:twitter_clone/view_model/user_view_model.dart';
 class OtherUserPage extends StatelessWidget {
   const OtherUserPage({super.key, required this.otherUserId});
 
-  final String? otherUserId;
+  final String otherUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +28,12 @@ class OtherUserPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final otherUser = snapshot.data?["otherUser"];
-            bool? isFollowed = snapshot.data?["isFollowed"];
+            bool? isFollowed = snapshot.data?["isFollowing"];
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection("tweets")
-                  .where("userId", isEqualTo: otherUserId)
-                  .orderBy("postDateTime", descending: true)
+                  .collection(tweets_collection)
+                  .where(user_id, isEqualTo: otherUserId)
+                  .orderBy("createdAt", descending: true)
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 print("streamBuilder: fired in time_line_page");
@@ -88,8 +89,8 @@ class OtherUserPage extends StatelessWidget {
                                     final userViewModel =
                                         context.read<UserViewModel>();
                                     await userViewModel
-                                        .followUnFollowUser(otherUserId!,
-                                            model.isFollowed == true)
+                                        .followUnFollowUser(
+                                            otherUser, model.isFollowed == true)
                                         .then(
                                           (value) => model.changeIsFollow(
                                               !model.isFollowed),
@@ -110,12 +111,12 @@ class OtherUserPage extends StatelessWidget {
                           children: [
                             _followFolowedButton(
                               onPressed: null,
-                              num: otherUser?.follow,
+                              num: otherUser?.followingNum,
                             ),
                             const SizedBox(width: 10),
                             _followFolowedButton(
                               onPressed: null,
-                              num: otherUser?.follower,
+                              num: otherUser?.followedNum,
                               isFollow: false,
                             ),
                             const Spacer(),
@@ -146,17 +147,10 @@ class OtherUserPage extends StatelessWidget {
   Future<Map<String, dynamic>> _future(BuildContext context) async {
     final userViewModel = context.read<UserViewModel>();
     final followUnFollowViewModel = context.read<FollowUnFollowViewModel>();
-    final followUsers = await userViewModel.getFollowUsers();
-    final otherUser = await userViewModel.getUserInfoById(otherUserId ?? "");
-    bool isFollowed = false;
-    if (followUsers != null) {
-      if (followUsers.contains(otherUser)) {
-        isFollowed = true;
-      }
-    }
-    followUnFollowViewModel.changeIsFollow(isFollowed);
-    print("otherUser$otherUser");
-    return {"otherUser": otherUser, "isFollowed": isFollowed};
+    final isFollowing = await userViewModel.isFollowingUser(otherUserId);
+    final otherUser = await userViewModel.getUserInfoById(otherUserId);
+    followUnFollowViewModel.changeIsFollow(isFollowing);
+    return {"otherUser": otherUser, "isFollowing": isFollowing};
   }
 
   _followFolowedButton({
