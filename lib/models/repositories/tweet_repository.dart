@@ -9,6 +9,9 @@ class TweetRepository {
 
   Future<void> postTweet({
     required String userId,
+    required String userName,
+    required String bio,
+    String? userIcon,
     required String desc,
   }) async {
     String tweetId = Uuid().v1();
@@ -18,8 +21,11 @@ class TweetRepository {
       favoriteNum: 0,
       desc: desc,
       createdAt: DateTime.now(),
+      userName: userName,
+      bio: bio,
+      userIcon: userIcon,
     );
-    await dbManager.insertTweet(tweet);
+    await dbManager.setTweet(tweet);
   }
 
   Future<void> deleteTweet(String tweetId) async {

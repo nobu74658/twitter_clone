@@ -19,9 +19,12 @@ class TweetViewModel extends ChangeNotifier {
 
     final desc = descController.text;
     descController.clear();
-
+    final curretUser = await userRepository.getCurrentUser();
     await tweetRepository.postTweet(
       userId: userRepository.printUserId(),
+      userName: curretUser.userName,
+      userIcon: curretUser.userIcon,
+      bio: curretUser.bio,
       desc: desc,
     );
 

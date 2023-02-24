@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 
 class UserViewModel extends ChangeNotifier {
@@ -20,9 +21,8 @@ class UserViewModel extends ChangeNotifier {
   bool isProcessing = false;
 
   // 現在のログインユーザーの情報を取得
-  Future<void> getCurrentUser() async {
-    await userRepository.getCurrentUser();
-    isProcessing = false;
+  Future<User> getCurrentUser() async {
+    return await userRepository.getCurrentUser();
   }
 
   // 画像取得
@@ -43,7 +43,7 @@ class UserViewModel extends ChangeNotifier {
     isProcessing = true;
     notifyListeners();
 
-    await userRepository.updateUserInfo(
+    await userRepository.updateUser(
         imageFile: imageFile,
         userName: nameController.text,
         bio: bioController.text);
@@ -54,28 +54,38 @@ class UserViewModel extends ChangeNotifier {
 
   // userIdから他ユーザーの情報を取得
   Future<User> getUserInfoById(String userId) async {
-    return await userRepository.getUserInfoById(userId);
+    return await userRepository.getUserById(userId);
   }
 
-  Future<void> followUnFollowUser(String otherUserId, bool isFollow) async {
+  Future<void> followUnFollowUser(User otherUser, bool isFollowing) async {
     isProcessing = true;
     notifyListeners();
 
-    isFollow
-        ? await userRepository.deleteFollowUser(otherUserId)
-        : await userRepository.followUser(otherUserId);
+    if (isFollowing) {
+      await userRepository.deleteFollowingUser(otherUser.userId);
+    } else {
+      final otherUserDesc = UserDesc(
+        userId: otherUser.userId,
+        userName: otherUser.userName,
+        bio: otherUser.bio,
+        userIcon: otherUser.userIcon,
+      );
+      await userRepository.setFollowing(otherUserDesc);
+    }
 
     isProcessing = false;
     notifyListeners();
   }
 
-  Future<List<User>?> getFollowUsers() async {
-    final users = await userRepository.getFollowUsers();
-    return users;
+  Future<List<UserDesc>> getFollowUsers() async {
+    return await userRepository.getFollowingUsers();
   }
 
-  Future<List<User>?> getFollowers() async {
-    final users = await userRepository.getFollowers();
-    return users;
+  Future<List<UserDesc>> getFollowers() async {
+    return await userRepository.getFollowedUsers();
+  }
+
+  Future<bool> isFollowingUser(String otherUserId) async {
+    return await userRepository.isFollowingUser(otherUserId);
   }
 }

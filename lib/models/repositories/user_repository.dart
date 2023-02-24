@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:uuid/uuid.dart';
 
@@ -36,28 +37,36 @@ class UserRepository {
         }
       } else {
         final isUserExistedInDb =
-            await dbManager.searchUserInDbByUserId(firebaseUser.uid);
+            await dbManager.searchUserById(firebaseUser.uid);
         if (!isUserExistedInDb) {
-          await dbManager.insertUser(_convertToUser(firebaseUser));
+          await dbManager.setCurrentUser(_convertToUser(firebaseUser));
         }
-        currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
+        currentUser = await dbManager.getUserById(firebaseUser.uid);
       }
     }
     return userCredential.user?.emailVerified;
   }
 
-  // ユーザー情報を取得
-  Future<void> getCurrentUser() async {
+  // ユーザー情報を更新
+  Future<void> updateCurrentUser() async {
     final firebaseUser = _auth.currentUser;
     if (firebaseUser != null) {
       final isUserExistedInDb =
-          await dbManager.searchUserInDbByUserId(firebaseUser.uid);
+          await dbManager.searchUserById(firebaseUser.uid);
       if (!isUserExistedInDb) {
-        await dbManager.insertUser(_convertToUser(firebaseUser));
+        await dbManager.setCurrentUser(_convertToUser(firebaseUser));
       }
-      await getFollowFollowerNum(firebaseUser.uid);
-      currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
+      // await setFollowingFollowedNum(firebaseUser.uid);
+      currentUser = await dbManager.getUserById(firebaseUser.uid);
     }
+  }
+
+  Future<User> getCurrentUser() async {
+    if (currentUser == null) {
+      await updateCurrentUser();
+      return currentUser!;
+    }
+    return currentUser!;
   }
 
   // サインアウト
@@ -66,34 +75,25 @@ class UserRepository {
     currentUser = null;
   }
 
-  // ユーザー自身の情報を取得
-  Future<bool> getUserInfo() async {
-    final firebaseUser = _auth.currentUser;
-    if (firebaseUser != null) {
-      currentUser = await dbManager.getUserInfoFromDbById(firebaseUser.uid);
-      return true;
-    }
-    return false;
-  }
-
-  // 他ユーザーの情報を取得
-  Future<User> getUserInfoById(String userId) async {
-    if (await dbManager.searchUserInDbByUserId(userId)) {
-      return await dbManager.getUserInfoFromDbById(userId);
+  // ユーザーの情報をuserIdで取得
+  Future<User> getUserById(String userId) async {
+    if (await dbManager.searchUserById(userId)) {
+      return await dbManager.getUserById(userId);
     } else {
       return User(
         userId: userId,
         userName: "unknown",
-        follow: 0,
-        follower: 0,
+        followingNum: 0,
+        followedNum: 0,
         createdAt: DateTime.now(),
+        bio: '',
       );
     }
   }
 
   // firebaseUserをデータベースに追加
-  Future<void> insertUser(auth.User firebaseUser) async {
-    await dbManager.insertUser(_convertToUser(firebaseUser));
+  Future<void> setCurrentUser(auth.User firebaseUser) async {
+    await dbManager.setCurrentUser(_convertToUser(firebaseUser));
   }
 
   _convertToUser(auth.User firebaseUser) {
@@ -102,12 +102,11 @@ class UserRepository {
         userName: firebaseUser.displayName ?? "unknown",
         email: firebaseUser.email,
         bio: "ここに自己紹介を表示することができます。",
-        follow: 0,
-        follower: 0,
+        followingNum: 0,
+        followedNum: 0,
         createdAt: DateTime.now());
   }
 
-  // TODO: web版でもimage_picker_webで画像取得できるようにする
   // 画像を取得する
   Future<File?> pickImage({required bool isFromGallery}) async {
     if (kIsWeb) {
@@ -126,7 +125,7 @@ class UserRepository {
   }
 
   // ユーザー情報を変更する
-  Future<void> updateUserInfo(
+  Future<void> updateUser(
       {required File? imageFile,
       required String? userName,
       required String? bio}) async {
@@ -139,11 +138,21 @@ class UserRepository {
       userIcon: imageUrl,
       userName: userName,
       bio: bio,
-      updatedAt: DateTime.now(),
     );
     currentUser = newUserInfo;
 
-    await dbManager.updateUserInfo(newUserInfo);
+    await dbManager.updateUser(newUserInfo);
+    UserDesc userDesc = UserDesc(
+      userId: currentUser!.userId,
+      userName: currentUser!.userName,
+      bio: currentUser!.bio,
+      userIcon: currentUser!.userIcon,
+    );
+    // Tweet中のユーザー情報を更新
+    await dbManager.updateAllTweet(userDesc);
+
+    // following, followed中のユーザー情報を更新
+    await dbManager.updateAllFollowingFollowed(userDesc);
   }
 
   // パスワードを変更
@@ -157,7 +166,7 @@ class UserRepository {
       User user = currentUser!.copyWith(
         email: email,
       );
-      await dbManager.updateEmail(user);
+      await dbManager.updateUser(user);
     });
   }
 
@@ -166,24 +175,30 @@ class UserRepository {
     return currentUser!.userId;
   }
 
-  Future<void> followUser(String otherUserId) async {
-    await dbManager.followUser(currentUser!.userId, otherUserId);
+  // フォローする
+  Future<void> setFollowing(UserDesc otherUserDesc) async {
+    final currentUserDesc = UserDesc(
+      userId: currentUser!.userId,
+      userName: currentUser!.userName,
+      bio: currentUser!.bio,
+      userIcon: currentUser!.userIcon,
+    );
+    await dbManager.setFollowing(currentUserDesc, otherUserDesc);
   }
 
-  Future<List<User>?> getFollowUsers() async {
-    return await dbManager.getFollowUsers(currentUser!.userId);
+  Future<List<UserDesc>> getFollowingUsers() async {
+    return await dbManager.getFollowingUsers(currentUser!.userId);
   }
 
-  Future<List<User>?> getFollowers() async {
-    return await dbManager.getFollowers(currentUser!.userId);
+  Future<List<UserDesc>> getFollowedUsers() async {
+    return await dbManager.getFollowedUsers(currentUser!.userId);
   }
 
-  Future<void> deleteFollowUser(String otherUserId) async {
-    await dbManager.deleteFollowUser(currentUser!.userId, otherUserId);
+  Future<void> deleteFollowingUser(String otherUserId) async {
+    await dbManager.deleteFollowing(currentUser!.userId, otherUserId);
   }
 
-  // フォロー、フォロワーの数を取得してくる
-  Future<void> getFollowFollowerNum(String userId) async {
-    await dbManager.getFollowFollowerNum(userId);
+  Future<bool> isFollowingUser(String otherUserId) async {
+    return await dbManager.isFollowingUser(currentUser!.userId, otherUserId);
   }
 }
