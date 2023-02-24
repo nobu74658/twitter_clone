@@ -6,6 +6,7 @@ import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/utils/formatter.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/top/components/user_circle_icon.dart';
+import 'package:twitter_clone/view_model/favorite_view_model.dart';
 import 'package:twitter_clone/view_model/page_view_model.dart';
 import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
@@ -113,24 +114,32 @@ class TweetTile extends StatelessWidget {
     );
   }
 
-  _likePart() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Icon(
-          Icons.favorite_border_outlined,
-          size: 16,
-        ),
-        Icon(
-          Icons.favorite,
-          color: Colors.red,
-          size: 16,
-        ),
-        Text(
-          "${tweet.favoriteNum}",
-          style: TextStyle(color: Colors.black54),
-        ),
-      ],
+  _likePart() async {
+    await Future(() {
+      /// currentUserのfavoriteTweetsのIdに含まれているかどうかでいいねしているかどうかを判定
+      // final favoriteViewModel =
+    });
+    return Consumer<FavoriteViewModel>(
+      builder: (context, model, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(
+              Icons.favorite_border_outlined,
+              size: 16,
+            ),
+            Icon(
+              Icons.favorite,
+              color: Colors.red,
+              size: 16,
+            ),
+            Text(
+              "${tweet.favoriteNum}",
+              style: TextStyle(color: Colors.black54),
+            ),
+          ],
+        );
+      },
     );
   }
 }
