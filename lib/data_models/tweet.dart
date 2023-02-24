@@ -1,9 +1,9 @@
 class Tweet {
-  String tweetId;
-  String userId;
-  int favorite;
-  String desc;
-  DateTime postDateTime;
+  final String tweetId;
+  final String userId;
+  final int favorite;
+  final String desc;
+  final DateTime createdAt;
 
 //<editor-fold desc="Data Methods">
 
@@ -12,7 +12,7 @@ class Tweet {
     required this.userId,
     required this.favorite,
     required this.desc,
-    required this.postDateTime,
+    required this.createdAt,
   });
 
   @override
@@ -24,7 +24,7 @@ class Tweet {
           userId == other.userId &&
           favorite == other.favorite &&
           desc == other.desc &&
-          postDateTime == other.postDateTime);
+          createdAt == other.createdAt);
 
   @override
   int get hashCode =>
@@ -32,7 +32,7 @@ class Tweet {
       userId.hashCode ^
       favorite.hashCode ^
       desc.hashCode ^
-      postDateTime.hashCode;
+      createdAt.hashCode;
 
   @override
   String toString() {
@@ -41,7 +41,7 @@ class Tweet {
         ' userId: $userId,' +
         ' favorite: $favorite,' +
         ' desc: $desc,' +
-        ' postDateTime: $postDateTime,' +
+        ' createdAt: $createdAt,' +
         '}';
   }
 
@@ -50,14 +50,14 @@ class Tweet {
     String? userId,
     int? favorite,
     String? desc,
-    DateTime? postDateTime,
+    DateTime? createdAt,
   }) {
     return Tweet(
       tweetId: postId ?? this.tweetId,
       userId: userId ?? this.userId,
       favorite: favorite ?? this.favorite,
       desc: desc ?? this.desc,
-      postDateTime: postDateTime ?? this.postDateTime,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -67,7 +67,7 @@ class Tweet {
       'userId': this.userId,
       'favorite': this.favorite,
       'desc': this.desc,
-      'postDateTime': this.postDateTime.toIso8601String(),
+      'createdAt': this.createdAt,
     };
   }
 
@@ -77,7 +77,7 @@ class Tweet {
       userId: map['userId'] as String,
       favorite: map['favorite'] as int,
       desc: map['desc'] as String,
-      postDateTime: DateTime.parse(map['postDateTime'] as String),
+      createdAt: map['createdAt'].toDate(),
     );
   }
 
