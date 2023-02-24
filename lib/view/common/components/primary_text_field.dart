@@ -13,6 +13,7 @@ class PrimaryTextField extends StatelessWidget {
     this.isMultiLine = false,
     this.maxLines = 1,
     this.height = 36,
+    this.isObscure = false,
   });
 
   final String? hintText;
@@ -23,6 +24,7 @@ class PrimaryTextField extends StatelessWidget {
   final bool? isMultiLine;
   final int? maxLines;
   final double? height;
+  final bool isObscure;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class PrimaryTextField extends StatelessWidget {
         SizedBox(
           height: height,
           child: TextFormField(
+            obscureText: isObscure,
             maxLines: maxLines,
             controller: controller,
             readOnly: readOnly,

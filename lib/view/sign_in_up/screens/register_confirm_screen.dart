@@ -38,6 +38,7 @@ class RegisterConfirmScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           PrimaryTextField(
+            isObscure: true,
             hintText: "パスワード",
             controller: signInUpViewModel.passController,
             isEdit: signInUpViewModel.passController.text != "",

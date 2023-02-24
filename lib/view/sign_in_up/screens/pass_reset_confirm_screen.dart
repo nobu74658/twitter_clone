@@ -31,6 +31,7 @@ class PassResetConfirmScreen extends StatelessWidget {
                   children: [
                     const Text("新しいパスワードを入力してください"),
                     PrimaryTextField(
+                      isObscure: true,
                       hintText: "パスワード",
                       controller: model.passController,
                       isEdit: model.passController.text != "",

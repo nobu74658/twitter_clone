@@ -42,6 +42,7 @@ class ResetAuthScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     PrimaryTextField(
+                      isObscure: true,
                       hintText: "パスワード",
                       controller: model.passController,
                       isEdit: model.passController.text != "",
