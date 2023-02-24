@@ -5,7 +5,7 @@ class User {
   final DateTime? updatedAt;
   final DateTime createdAt;
   final String? email;
-  final String? bio;
+  final String bio;
   final int followingNum;
   final int followedNum;
 
@@ -18,7 +18,7 @@ class User {
     this.updatedAt,
     required this.createdAt,
     this.email,
-    this.bio,
+    required this.bio,
     required this.followingNum,
     required this.followedNum,
   });
@@ -111,7 +111,7 @@ class User {
       updatedAt: map['updatedAt']?.toDate(),
       createdAt: map['createdAt'].toDate(),
       email: map['email'] as String?,
-      bio: map['bio'] as String?,
+      bio: map['bio'] as String,
       followingNum: map['followingNum'] as int,
       followedNum: map['followedNum'] as int,
     );
