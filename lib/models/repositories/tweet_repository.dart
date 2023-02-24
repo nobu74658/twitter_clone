@@ -17,7 +17,7 @@ class TweetRepository {
       userId: userId,
       favorite: 0,
       desc: desc,
-      postDateTime: DateTime.now(),
+      createdAt: DateTime.now(),
     );
     await dbManager.insertTweet(tweet);
   }
