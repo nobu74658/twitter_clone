@@ -67,18 +67,10 @@ class DatabaseManager {
         .set(tweet.toMap());
   }
 
-  // Future<void> insertTweet(Tweet tweet) async {
-  //   await _db.collection("tweets").doc(tweet.tweetId).set(tweet.toMap());
-  // }
-
   // TweetをtweetIdで削除する
   Future<void> deleteTweet(String tweetId) async {
     await _db.collection(tweets_collection).doc(tweetId).delete();
   }
-
-  // Future<void> deleteTweet(String tweetId) async {
-  //   await _db.collection("tweets").doc(tweetId).delete();
-  // }
 
   // userIdでTweetを全て取得
   Future<List<Tweet>> getTweetByUserId(String userId) async {
@@ -145,34 +137,6 @@ class DatabaseManager {
     });
   }
 
-  // Future<void> followUser(String userId, String otherUserId) async {
-  //   final batch = _db.batch();
-
-  //   var followRef = _db.collection("follow-followed").doc(userId);
-  //   final followUsers = await getFollowUsers(userId);
-  //   var followUserIds = <String>[];
-  //   followUserIds.add(otherUserId);
-  //   if (followUsers != null) {
-  //     for (int i = 0; i < followUsers.length; i++) {
-  //       followUserIds.add(followUsers[i].userId);
-  //     }
-  //   }
-  //   batch.update(followRef, {"followUserId": followUserIds});
-
-  //   var followerRef = _db.collection("follow-followed").doc(otherUserId);
-  //   final followers = await getFollowers(otherUserId);
-  //   var followerIds = <String>[];
-  //   followerIds.add(userId);
-  //   if (followers != null) {
-  //     for (int i = 0; i < followers.length; i++) {
-  //       followerIds.add(followers[i].userId);
-  //     }
-  //   }
-  //   batch.update(followerRef, {"followerId": followerIds});
-
-  //   await batch.commit();
-  // }
-
   // フォロー中のユーザーをfollowingから削除
   Future<void> deleteFollowing(String currentUserId, String otherUserId) async {
     final currentUserRef = _db.collection(users_collection).doc(currentUserId);
@@ -192,37 +156,6 @@ class DatabaseManager {
     });
   }
 
-  // Future<void> deleteFollowUser(String userId, String otherUserId) async {
-  //   final batch = _db.batch();
-
-  //   var followRef = _db.collection("follow-followed").doc(userId);
-  //   final followUsers = await getFollowUsers(userId);
-  //   var followUserIds = <String>[];
-  //   if (followUsers != null) {
-  //     for (int i = 0; i < followUsers.length; i++) {
-  //       if (followUsers[i].userId != otherUserId) {
-  //         followUserIds.add(followUsers[i].userId);
-  //       }
-  //     }
-  //   }
-  //   print(followUserIds);
-  //   batch.update(followRef, {"followUserId": followUserIds});
-
-  //   var followerRef = _db.collection("follow-followed").doc(otherUserId);
-  //   final followers = await getFollowers(otherUserId);
-  //   var followerIds = <String>[];
-  //   if (followers != null) {
-  //     for (int i = 0; i < followers.length; i++) {
-  //       if (followers[i].userId != userId) {
-  //         followerIds.add(followers[i].userId);
-  //       }
-  //     }
-  //   }
-  //   batch.update(followerRef, {"followerId": followerIds});
-
-  //   await batch.commit();
-  // }
-
   // folloingの中のユーザーを全て取得
   Future<List<UserDesc>> getFollowingUsers(String userId) async {
     final followingUsers = <UserDesc>[];
@@ -236,28 +169,6 @@ class DatabaseManager {
     }
     return followingUsers;
   }
-
-  // Future<List<User>?> getFollowUsers(String userId) async {
-  //   print("userId$userId");
-  //   final field = await _db
-  //       .collection("follow-followed")
-  //       .doc(userId)
-  //       .get()
-  //       .then((value) => value.data()?["followUserId"]);
-  //   var followUserIds = <String>[];
-  //   if (field != null) {
-  //     for (int i = 0; i < field.length; i++) {
-  //       followUserIds.add(field?[i]);
-  //     }
-  //     print(followUserIds);
-  //     var followUsers = <User>[];
-  //     for (int i = 0; i < followUserIds.length; i++) {
-  //       // followUsers.add(await getUserInfoFromDbById(followUserIds[i]));
-  //     }
-  //     return followUsers;
-  //   }
-  //   return null;
-  // }
 
   // followedの中のユーザーを取得
   Future<List<UserDesc>> getFollowedUsers(String userId) async {
@@ -293,27 +204,6 @@ class DatabaseManager {
     }
     await Future.wait(tasks);
   }
-
-  // Future<List<User>?> getFollowers(String userId) async {
-  //   final field = await _db
-  //       .collection("follow-followed")
-  //       .doc(userId)
-  //       .get()
-  //       .then((value) => value.data()?["followerId"]);
-  //   var followerIds = <String>[];
-  //   if (field != null) {
-  //     for (int i = 0; i < field.length; i++) {
-  //       followerIds.add(field?[i]);
-  //     }
-  //     print(followerIds);
-  //     var followers = <User>[];
-  //     for (int i = 0; i < followerIds.length; i++) {
-  //       // followers.add(await getUserInfoFromDbById(followerIds[i]));
-  //     }
-  //     return followers;
-  //   }
-  //   return null;
-  // }
 
   // フォロー、フォロワー数を取得して書き込む
   Future<void> updateFollowingFollowedNum(String userId) async {
@@ -351,18 +241,6 @@ class DatabaseManager {
     }
     return false;
   }
-
-  // Future<void> getFollowFollowerNum(String userId) async {
-  //   final followUsers = await getFollowUsers(userId);
-  //   int followUserNum = followUsers?.length ?? 0;
-  //   final followers = await getFollowers(userId);
-  //   int followerNum = followers?.length ?? 0;
-
-  //   await _db
-  //       .collection("users")
-  //       .doc(userId)
-  //       .update({"follow": followUserNum, "follower": followerNum});
-  // }
 
   ///-------------following followed <end>-------------///
 
