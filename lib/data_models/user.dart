@@ -6,8 +6,8 @@ class User {
   final DateTime createdAt;
   final String? email;
   final String? bio;
-  final int follow;
-  final int follower;
+  final int followingNum;
+  final int followedNum;
 
 //<editor-fold desc="Data Methods">
 
@@ -19,8 +19,8 @@ class User {
     required this.createdAt,
     this.email,
     this.bio,
-    required this.follow,
-    required this.follower,
+    required this.followingNum,
+    required this.followedNum,
   });
 
   @override
@@ -35,8 +35,8 @@ class User {
           createdAt == other.createdAt &&
           email == other.email &&
           bio == other.bio &&
-          follow == other.follow &&
-          follower == other.follower);
+          followingNum == other.followingNum &&
+          followedNum == other.followedNum);
 
   @override
   int get hashCode =>
@@ -47,8 +47,8 @@ class User {
       createdAt.hashCode ^
       email.hashCode ^
       bio.hashCode ^
-      follow.hashCode ^
-      follower.hashCode;
+      followingNum.hashCode ^
+      followedNum.hashCode;
 
   @override
   String toString() {
@@ -60,8 +60,8 @@ class User {
         ' createdAt: $createdAt,' +
         ' email: $email,' +
         ' bio: $bio,' +
-        ' follow: $follow,' +
-        ' follower: $follower,' +
+        ' followingNum: $followingNum,' +
+        ' followedNum: $followedNum,' +
         '}';
   }
 
@@ -73,8 +73,8 @@ class User {
     DateTime? createdAt,
     String? email,
     String? bio,
-    int? follow,
-    int? follower,
+    int? followingNum,
+    int? followedNum,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -84,8 +84,8 @@ class User {
       createdAt: createdAt ?? this.createdAt,
       email: email ?? this.email,
       bio: bio ?? this.bio,
-      follow: follow ?? this.follow,
-      follower: follower ?? this.follower,
+      followingNum: followingNum ?? this.followingNum,
+      followedNum: followedNum ?? this.followedNum,
     );
   }
 
@@ -98,8 +98,8 @@ class User {
       'createdAt': this.createdAt,
       'email': this.email,
       'bio': this.bio,
-      'follow': this.follow,
-      'follower': this.follower,
+      'followingNum': this.followingNum,
+      'followedNum': this.followedNum,
     };
   }
 
@@ -112,8 +112,8 @@ class User {
       createdAt: map['createdAt'].toDate(),
       email: map['email'] as String?,
       bio: map['bio'] as String?,
-      follow: map['follow'] as int,
-      follower: map['follower'] as int,
+      followingNum: map['followingNum'] as int,
+      followedNum: map['followedNum'] as int,
     );
   }
 

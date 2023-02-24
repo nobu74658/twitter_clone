@@ -58,13 +58,13 @@ class ProfilePage extends StatelessWidget {
             children: [
               _followFolowedButton(
                 context: context,
-                num: currentUser?.follow,
+                num: currentUser?.followingNum,
               ),
               const SizedBox(width: 10),
               _followFolowedButton(
                 context: context,
                 isFollow: false,
-                num: currentUser?.follower,
+                num: currentUser?.followedNum,
               ),
               const Spacer(),
             ],
