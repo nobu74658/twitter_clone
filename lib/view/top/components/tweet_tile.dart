@@ -90,7 +90,7 @@ class TweetTile extends StatelessWidget {
               userName ?? "unknown",
             ),
             const SizedBox(width: 20),
-            Text(dateFormatter.format(tweet.postDateTime)),
+            Text(dateFormatter.format(tweet.createdAt)),
           ],
         ),
         currentUserId == tweet.userId
