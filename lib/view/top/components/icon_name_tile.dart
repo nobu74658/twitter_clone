@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user_desc.dart';
 
 class IconNameTile extends StatelessWidget {
   const IconNameTile({super.key, required this.user});
 
-  final User user;
+  final UserDesc user;
 
   @override
   Widget build(BuildContext context) {
