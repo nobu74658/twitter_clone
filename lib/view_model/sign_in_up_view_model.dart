@@ -65,6 +65,7 @@ class SignInUpViewModel extends ChangeNotifier {
     notifyListeners();
 
     final pass = passController.text;
+    passController.clear();
 
     await userRepository.passReset(pass);
 
@@ -83,6 +84,8 @@ class SignInUpViewModel extends ChangeNotifier {
     notifyListeners();
 
     final email = emailController.text;
+    emailController.clear();
+
     await userRepository.emailReset(email);
 
     isProcessing = false;
