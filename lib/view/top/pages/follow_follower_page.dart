@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
