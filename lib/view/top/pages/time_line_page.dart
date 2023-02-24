@@ -16,7 +16,7 @@ class TimeLinePage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("tweets")
-            .orderBy("postDateTime", descending: true)
+            .orderBy("createdAt", descending: true)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
