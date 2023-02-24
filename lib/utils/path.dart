@@ -179,9 +179,15 @@ final GoRouter router = GoRouter(
       ),
     ),
     GoRoute(
+      path: kOtherUserPath,
+      pageBuilder: (context, state) => const MaterialPage(
+        child: TopScreen(),
+      ),
+    ),
+    GoRoute(
       path: "$kOtherUserPath/:user_id",
       pageBuilder: (context, state) {
-        String? userId = state.params['user_id'];
+        String userId = state.params['user_id'] ?? "";
         return MaterialPage(
           child: OtherUserPage(otherUserId: userId),
         );
