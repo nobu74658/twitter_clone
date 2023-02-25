@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/common/components/primary_text_field.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
@@ -11,17 +12,18 @@ class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userViewModel = context.read<UserViewModel>();
-    final currentUser = userViewModel.currentUser!;
-    String? userIcon = currentUser.userIcon;
+    final currentUser = userViewModel.currentUser;
+
+    String? userIcon = currentUser?.userIcon;
     Image iconImage = Image(
         image: CachedNetworkImageProvider(
-            currentUser.userIcon ?? "https://placehold.jp/150x150.png"));
-    String? userName = currentUser.userName;
+            currentUser?.userIcon ?? "https://placehold.jp/150x150.png"));
+    String? userName = currentUser?.userName;
     final nameController = userViewModel.nameController;
-    nameController.text = userName;
-    String? bio = currentUser.bio;
+    nameController.text = userName ?? "";
+    String? bio = currentUser?.bio;
     final bioController = userViewModel.bioController;
-    bioController.text = bio;
+    bioController.text = bio ?? "";
 
     return Scaffold(
       body: Consumer<UserViewModel>(
@@ -38,17 +40,21 @@ class EditProfilePage extends StatelessWidget {
                       children: [
                         TextButton(
                           onPressed: () {
-                            context.pop();
+                            context.go(kTopPath);
                           },
                           child: const Text("戻る"),
                         ),
                         TextButton(
                           onPressed: () async {
-                            await model
-                                .updateUserInfo()
-                                .then((value) => context.pop());
+                            if (currentUser != null) {
+                              await model
+                                  .updateUserInfo()
+                                  .then((value) => context.pop());
+                            } else {
+                              context.go(kTopPath);
+                            }
                           },
-                          child: const Text("完了"),
+                          child: Text(currentUser != null ? "完了" : "戻る"),
                         ),
                       ],
                     ),
