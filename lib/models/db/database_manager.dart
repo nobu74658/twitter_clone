@@ -70,6 +70,15 @@ class DatabaseManager {
   // TweetをtweetIdで削除する
   Future<void> deleteTweet(String tweetId) async {
     await _db.collection(tweets_collection).doc(tweetId).delete();
+    final query = await _db
+        .collectionGroup(favorite_tweet_collection)
+        .where(tweet_id, isEqualTo: tweetId)
+        .get();
+    final tasks = <Future<void>>[];
+    for (int i = 0; i < query.docs.length; i++) {
+      tasks.add(query.docs[i].reference.delete());
+    }
+    await Future.wait(tasks);
   }
 
   // userIdでTweetを全て取得
