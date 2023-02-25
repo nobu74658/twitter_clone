@@ -72,6 +72,7 @@ class UserViewModel extends ChangeNotifier {
       );
       await userRepository.setFollowing(otherUserDesc);
     }
+    userRepository.getCurrentUser();
 
     isProcessing = false;
     notifyListeners();
