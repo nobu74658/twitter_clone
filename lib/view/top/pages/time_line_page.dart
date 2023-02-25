@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/view/top/components/tweet_tile.dart';
+import 'package:twitter_clone/view_model/favorite_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TimeLinePage extends StatelessWidget {
@@ -12,6 +13,7 @@ class TimeLinePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userViewModel = context.read<UserViewModel>();
     final currentUser = userViewModel.currentUser!;
+    final favoriteViewModel = context.read<FavoriteViewModel>();
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -44,6 +46,7 @@ class TimeLinePage extends StatelessWidget {
               return TweetTile(
                 tweet: tweet,
                 currentUserId: currentUser.userId,
+                favoriteTweets: favoriteViewModel.favoriteTweets,
               );
             },
           );

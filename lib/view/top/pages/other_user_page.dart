@@ -7,6 +7,7 @@ import 'package:twitter_clone/utils/keys.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
 import 'package:twitter_clone/view/top/components/tweet_tile.dart';
+import 'package:twitter_clone/view_model/favorite_view_model.dart';
 import 'package:twitter_clone/view_model/follow_unfollow_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
@@ -26,6 +27,7 @@ class OtherUserPage extends StatelessWidget {
       body: FutureBuilder(
         future: _future(context),
         builder: (context, snapshot) {
+          final favoriteViewModel = context.read<FavoriteViewModel>();
           if (snapshot.connectionState == ConnectionState.done) {
             final otherUser = snapshot.data?["otherUser"];
             bool? isFollowed = snapshot.data?["isFollowing"];
@@ -129,7 +131,10 @@ class OtherUserPage extends StatelessWidget {
                       final data =
                           docs[index - 6].data() as Map<String, dynamic>;
                       final tweet = Tweet.fromMap(data);
-                      return TweetTile(tweet: tweet);
+                      return TweetTile(
+                        tweet: tweet,
+                        favoriteTweets: favoriteViewModel.favoriteTweets,
+                      );
                     }
                   },
                 );
