@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
@@ -200,5 +201,9 @@ class UserRepository {
 
   Future<bool> isFollowingUser(String otherUserId) async {
     return await dbManager.isFollowingUser(currentUser!.userId, otherUserId);
+  }
+
+  Future<List<Tweet>> getFavoriteTweets() async {
+    return await dbManager.getFavoriteTweets(currentUser!.userId);
   }
 }

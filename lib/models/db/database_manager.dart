@@ -253,5 +253,23 @@ class DatabaseManager {
 
   // Tweetのいいねの数をtweetIdで取得する
 
+  /// いいねしたツイートを全て取得する
+  Future<List<Tweet>> getFavoriteTweets(String userId) async {
+    List<Tweet> favoriteTweets = [];
+    final query = await _db
+        .collection(users_collection)
+        .doc(userId)
+        .collection(favorite_tweet)
+        .get();
+    for (int i = 0; i < query.docs.length; i++) {
+      favoriteTweets.add(
+        Tweet.fromMap(
+          query.docs[i].data(),
+        ),
+      );
+    }
+    return favoriteTweets;
+  }
+
   ///-------------favorite-tweet, favorite-by-user <end>-------------///
 }
