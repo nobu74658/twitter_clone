@@ -7,7 +7,7 @@ class TweetRepository {
 
   final DatabaseManager dbManager;
 
-  Future<void> postTweet({
+  Future<Tweet> postTweet({
     required String userId,
     required String userName,
     required String bio,
@@ -26,6 +26,7 @@ class TweetRepository {
       userIcon: userIcon,
     );
     await dbManager.setTweet(tweet);
+    return tweet;
   }
 
   Future<void> deleteTweet(String tweetId) async {
