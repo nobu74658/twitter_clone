@@ -38,7 +38,12 @@ class TimeLinePage extends StatelessWidget {
           }
           final docs = snapshot.data!.docs;
           return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              16,
+              20,
+              60,
+            ),
             itemCount: docs.length,
             itemBuilder: (context, index) {
               final data = docs[index].data() as Map<String, dynamic>;
