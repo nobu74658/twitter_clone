@@ -10,11 +10,12 @@ import 'package:twitter_clone/view_model/page_view_model.dart';
 import 'package:twitter_clone/view_model/tweet_view_model.dart';
 
 class TweetTile extends StatelessWidget {
-  const TweetTile(
-      {super.key,
-      required this.tweet,
-      this.currentUserId,
-      required this.favoriteTweets});
+  const TweetTile({
+    super.key,
+    required this.tweet,
+    this.currentUserId,
+    required this.favoriteTweets,
+  });
 
   final Tweet tweet;
   final String? currentUserId;
@@ -116,28 +117,30 @@ class TweetTile extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        isFavorite
-            ? IconButton(
-                splashRadius: 20,
-                onPressed: () async {
-                  await favoriteViewModel.deleteFavoriteTweet(tweet);
-                },
-                icon: const Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                  size: 16,
-                ),
-              )
-            : IconButton(
-                splashRadius: 20,
-                onPressed: () async {
-                  await favoriteViewModel.setFavoriteTweet(tweet);
-                },
-                icon: const Icon(
-                  Icons.favorite_border_outlined,
-                  size: 16,
-                ),
-              ),
+        currentUserId == tweet.userId
+            ? Container()
+            : isFavorite
+                ? IconButton(
+                    splashRadius: 20,
+                    onPressed: () async {
+                      await favoriteViewModel.deleteFavoriteTweet(tweet);
+                    },
+                    icon: const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: 16,
+                    ),
+                  )
+                : IconButton(
+                    splashRadius: 20,
+                    onPressed: () async {
+                      await favoriteViewModel.setFavoriteTweet(tweet);
+                    },
+                    icon: const Icon(
+                      Icons.favorite_border_outlined,
+                      size: 16,
+                    ),
+                  ),
         SizedBox(
           width: 20,
           child: Text(
