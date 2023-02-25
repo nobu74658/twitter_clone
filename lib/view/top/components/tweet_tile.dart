@@ -55,7 +55,7 @@ class TweetTile extends StatelessWidget {
         final pageViewModel = context.read<PageViewModel>();
         currentUserId == userId
             ? pageViewModel.pageTransition(2)
-            : context.push("$kOtherUserPath/$userId");
+            : context.go("$kOtherUserPath/$userId");
       },
     );
   }

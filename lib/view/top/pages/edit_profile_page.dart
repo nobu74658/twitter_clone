@@ -47,7 +47,7 @@ class EditProfilePage extends StatelessWidget {
                             if (currentUser != null) {
                               await model
                                   .updateUserInfo()
-                                  .then((value) => context.pop());
+                                  .then((value) => context.go(kTopPath));
                             } else {
                               context.go(kTopPath);
                             }

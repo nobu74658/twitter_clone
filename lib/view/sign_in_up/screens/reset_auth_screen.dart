@@ -71,7 +71,7 @@ class ResetAuthScreen extends StatelessWidget {
         "キャンセル",
       ),
       onPressed: () {
-        context.pop();
+        context.go(kTopPath);
       },
     );
   }

@@ -124,7 +124,7 @@ class ProfilePage extends StatelessWidget {
       style: const ButtonStyle(
         foregroundColor: MaterialStatePropertyAll(Colors.black),
       ),
-      onPressed: () => context.push(isFollow ? kFollowPath : kFollowerPath),
+      onPressed: () => context.go(isFollow ? kFollowPath : kFollowerPath),
       child: Text(isFollow ? "$numフォロー中" : "$numフォロワー"),
     );
   }
