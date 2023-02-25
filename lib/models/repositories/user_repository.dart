@@ -184,6 +184,8 @@ class UserRepository {
       bio: currentUser!.bio,
       userIcon: currentUser!.userIcon,
     );
+    currentUser =
+        currentUser!.copyWith(followingNum: currentUser!.followingNum + 1);
     await dbManager.setFollowing(currentUserDesc, otherUserDesc);
   }
 
@@ -197,6 +199,8 @@ class UserRepository {
 
   Future<void> deleteFollowingUser(String otherUserId) async {
     await dbManager.deleteFollowing(currentUser!.userId, otherUserId);
+    currentUser =
+        currentUser!.copyWith(followingNum: currentUser!.followingNum - 1);
   }
 
   Future<bool> isFollowingUser(String otherUserId) async {
