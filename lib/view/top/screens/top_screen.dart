@@ -33,7 +33,7 @@ class TopScreen extends StatelessWidget {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  context.push(kPostTweetPath);
+                  context.go(kPostTweetPath);
                 },
                 child: const Icon(Icons.add),
               ),
