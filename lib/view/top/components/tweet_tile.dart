@@ -96,7 +96,7 @@ class TweetTile extends StatelessWidget {
                 icon: const Icon(Icons.close),
                 onPressed: () async {
                   final tweetViewModel = context.read<TweetViewModel>();
-                  await tweetViewModel.deleteTweet(tweet.tweetId).then(
+                  await tweetViewModel.deleteTweet(tweet).then(
                         (value) => showBottomSheet(
                           context: context,
                           builder: (context) {
