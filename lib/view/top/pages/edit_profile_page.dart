@@ -13,8 +13,6 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userViewModel = context.read<UserViewModel>();
     final currentUser = userViewModel.currentUser;
-
-    String? userIcon = currentUser?.userIcon;
     Image iconImage = Image(
         image: CachedNetworkImageProvider(
             currentUser?.userIcon ?? "https://placehold.jp/150x150.png"));
