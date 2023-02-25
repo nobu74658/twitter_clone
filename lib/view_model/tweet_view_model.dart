@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/models/repositories/tweet_repository.dart';
@@ -16,6 +18,9 @@ class TweetViewModel extends ChangeNotifier {
   TextEditingController descController;
   List<Tweet> currentUserTweets;
 
+  File? imageFile;
+  bool isImagePicked = false;
+
   Future<void> postTweet() async {
     isProcessing = true;
     notifyListeners();
@@ -29,6 +34,7 @@ class TweetViewModel extends ChangeNotifier {
       userIcon: curretUser.userIcon,
       bio: curretUser.bio,
       desc: desc,
+      imageFile: imageFile,
     );
     currentUserTweets.add(tweet);
 
@@ -60,6 +66,18 @@ class TweetViewModel extends ChangeNotifier {
 
     currentUserTweets = await userRepository.getCurrentUserTweet();
 
+    isProcessing = false;
+    notifyListeners();
+  }
+
+  Future<void> getImage({required bool isFromGallery}) async {
+    isImagePicked = false;
+    isProcessing = true;
+    notifyListeners();
+
+    imageFile = await userRepository.pickImage(isFromGallery: isFromGallery);
+
+    if (imageFile != null) isImagePicked = true;
     isProcessing = false;
     notifyListeners();
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,18 @@ class TweetTile extends StatelessWidget {
             softWrap: true,
             style: const TextStyle(color: Colors.black54),
           ),
+          const SizedBox(height: 6),
+          tweet.imageUrl != null
+              ? Container(
+                  width: 200,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(tweet.imageUrl!),
+                    ),
+                  ),
+                )
+              : Container(),
           const SizedBox(height: 6),
           _likePart(context, isFavorite),
         ],

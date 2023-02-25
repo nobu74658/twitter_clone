@@ -6,6 +6,7 @@ class Tweet {
   final String bio;
   final int favoriteNum;
   final String desc;
+  final String? imageUrl;
   final DateTime createdAt;
 
 //<editor-fold desc="Data Methods">
@@ -18,6 +19,7 @@ class Tweet {
     required this.bio,
     required this.favoriteNum,
     required this.desc,
+    this.imageUrl,
     required this.createdAt,
   });
 
@@ -33,6 +35,7 @@ class Tweet {
           bio == other.bio &&
           favoriteNum == other.favoriteNum &&
           desc == other.desc &&
+          imageUrl == other.imageUrl &&
           createdAt == other.createdAt);
 
   @override
@@ -44,6 +47,7 @@ class Tweet {
       bio.hashCode ^
       favoriteNum.hashCode ^
       desc.hashCode ^
+      imageUrl.hashCode ^
       createdAt.hashCode;
 
   @override
@@ -56,6 +60,7 @@ class Tweet {
         ' bio: $bio,' +
         ' favoriteNum: $favoriteNum,' +
         ' desc: $desc,' +
+        ' imageUrl: $imageUrl,' +
         ' createdAt: $createdAt,' +
         '}';
   }
@@ -68,6 +73,7 @@ class Tweet {
     String? bio,
     int? favoriteNum,
     String? desc,
+    String? imageUrl,
     DateTime? createdAt,
   }) {
     return Tweet(
@@ -78,6 +84,7 @@ class Tweet {
       bio: bio ?? this.bio,
       favoriteNum: favoriteNum ?? this.favoriteNum,
       desc: desc ?? this.desc,
+      imageUrl: imageUrl ?? this.imageUrl,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -91,6 +98,7 @@ class Tweet {
       'bio': this.bio,
       'favoriteNum': this.favoriteNum,
       'desc': this.desc,
+      'imageUrl': this.imageUrl,
       'createdAt': this.createdAt,
     };
   }
@@ -104,6 +112,7 @@ class Tweet {
       bio: map['bio'] as String,
       favoriteNum: map['favoriteNum'] as int,
       desc: map['desc'] as String,
+      imageUrl: map['imageUrl'] as String?,
       createdAt: map['createdAt'].toDate(),
     );
   }
