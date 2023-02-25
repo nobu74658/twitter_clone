@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:twitter_clone/utils/authentication.dart';
-import 'package:twitter_clone/utils/path.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -23,7 +21,7 @@ class SplashScreen extends StatelessWidget {
             FutureBuilder(
               future: Authentication.initializeFirebase(context: context),
               builder: (context, snapshot) {
-                return CircularProgressIndicator(
+                return const CircularProgressIndicator(
                   color: Colors.white,
                 );
               },
