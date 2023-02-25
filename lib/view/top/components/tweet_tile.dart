@@ -93,7 +93,7 @@ class TweetTile extends StatelessWidget {
         ),
         currentUserId == tweet.userId
             ? IconButton(
-                icon: const Icon(Icons.more_horiz),
+                icon: const Icon(Icons.close),
                 onPressed: () async {
                   final tweetViewModel = context.read<TweetViewModel>();
                   await tweetViewModel.deleteTweet(tweet.tweetId).then(
