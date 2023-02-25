@@ -20,4 +20,19 @@ class FavoriteViewModel extends ChangeNotifier {
     isProcessing = false;
     notifyListeners();
   }
+
+  Future<void> setFavoriteTweet(Tweet tweet) async {
+    tweet = tweet.copyWith(favoriteNum: tweet.favoriteNum + 1);
+    await userRepository
+        .setFavoriteTweet(tweet)
+        .then((value) => favoriteTweets.add(tweet));
+    notifyListeners();
+  }
+
+  Future<void> deleteFavoriteTweet(Tweet tweet) async {
+    await userRepository
+        .deleteFavoriteTweet(tweet)
+        .then((value) => favoriteTweets.remove(tweet));
+    notifyListeners();
+  }
 }

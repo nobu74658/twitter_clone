@@ -206,4 +206,12 @@ class UserRepository {
   Future<List<Tweet>> getFavoriteTweets() async {
     return await dbManager.getFavoriteTweets(currentUser!.userId);
   }
+
+  Future<void> setFavoriteTweet(Tweet tweet) async {
+    await dbManager.setFavoriteTweet(currentUser!.userId, tweet);
+  }
+
+  Future<void> deleteFavoriteTweet(Tweet tweet) async {
+    await dbManager.deleteFavoriteTweet(currentUser!.userId, tweet);
+  }
 }

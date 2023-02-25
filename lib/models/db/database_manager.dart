@@ -259,7 +259,7 @@ class DatabaseManager {
     final query = await _db
         .collection(users_collection)
         .doc(userId)
-        .collection(favorite_tweet)
+        .collection(favorite_tweet_collection)
         .get();
     for (int i = 0; i < query.docs.length; i++) {
       favoriteTweets.add(
@@ -269,6 +269,40 @@ class DatabaseManager {
       );
     }
     return favoriteTweets;
+  }
+
+  Future<void> setFavoriteTweet(String userId, Tweet tweet) async {
+    final favoriteTweetRef = _db
+        .collection(users_collection)
+        .doc(userId)
+        .collection(favorite_tweet_collection)
+        .doc(tweet.tweetId);
+    final tweetRef = _db.collection(tweets_collection).doc(tweet.tweetId);
+    await _db.runTransaction((transaction) async {
+      transaction.set(favoriteTweetRef, tweet.toMap());
+      transaction.set(
+        tweetRef,
+        {favorite_num: FieldValue.increment(1)},
+        SetOptions(merge: true),
+      );
+    });
+  }
+
+  Future<void> deleteFavoriteTweet(String userId, Tweet tweet) async {
+    final favoriteTweetRef = _db
+        .collection(users_collection)
+        .doc(userId)
+        .collection(favorite_tweet_collection)
+        .doc(tweet.tweetId);
+    final tweetRef = _db.collection(tweets_collection).doc(tweet.tweetId);
+    _db.runTransaction((transaction) async {
+      transaction.delete(favoriteTweetRef);
+      transaction.set(
+        tweetRef,
+        {favorite_num: FieldValue.increment(-1)},
+        SetOptions(merge: true),
+      );
+    });
   }
 
   ///-------------favorite-tweet, favorite-by-user <end>-------------///
