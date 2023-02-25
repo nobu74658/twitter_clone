@@ -57,9 +57,7 @@ final GoRouter router = GoRouter(
         default:
           path = kLoginPath;
       }
-      print(state.location);
     } else {
-      print("loggedIn: ${state.location}");
       switch (state.location) {
         case kInitialPath:
           path = kInitialPath;
@@ -82,7 +80,6 @@ final GoRouter router = GoRouter(
         default:
       }
     }
-    print("path:$path");
     return path;
   },
   routes: [
