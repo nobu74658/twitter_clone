@@ -8,6 +8,7 @@ import 'package:twitter_clone/view/top/pages/favorite_tweet_page.dart';
 import 'package:twitter_clone/view/top/pages/profile_page.dart';
 import 'package:twitter_clone/view_model/favorite_view_model.dart';
 import 'package:twitter_clone/view_model/page_view_model.dart';
+import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TopScreen extends StatelessWidget {
@@ -71,7 +72,9 @@ class TopScreen extends StatelessWidget {
   Future<void> _future(BuildContext context) async {
     final userViewModel = context.read<UserViewModel>();
     final favoriteViewModel = context.read<FavoriteViewModel>();
+    final tweetViewModel = context.read<TweetViewModel>();
     await userViewModel.getCurrentUser();
+    await tweetViewModel.getCurrentUserTweet();
     await favoriteViewModel.getFavoriteTweets();
   }
 }

@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/common/components/sign_out_text_button.dart';
+import 'package:twitter_clone/view/top/components/tweet_tile.dart';
+import 'package:twitter_clone/view_model/favorite_view_model.dart';
+import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -13,6 +16,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userViewModel = context.read<UserViewModel>();
     final currentUser = userViewModel.currentUser;
+    final favoriteViewModel = context.read<FavoriteViewModel>();
 
     return Scaffold(
       body: ListView(
@@ -87,6 +91,21 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
+          Consumer<TweetViewModel>(builder: (context, model, child) {
+            return SizedBox(
+              height: 500,
+              child: ListView.builder(
+                itemCount: model.currentUserTweets.length,
+                itemBuilder: (context, index) {
+                  return TweetTile(
+                    tweet: model.currentUserTweets[index],
+                    currentUserId: currentUser!.userId,
+                    favoriteTweets: favoriteViewModel.favoriteTweets,
+                  );
+                },
+              ),
+            );
+          }),
         ],
       ),
     );

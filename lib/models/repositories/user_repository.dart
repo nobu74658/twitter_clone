@@ -214,4 +214,8 @@ class UserRepository {
   Future<void> deleteFavoriteTweet(Tweet tweet) async {
     await dbManager.deleteFavoriteTweet(currentUser!.userId, tweet);
   }
+
+  Future<List<Tweet>> getCurrentUserTweet() async {
+    return await dbManager.getCurrentUserTweet(currentUser!.userId);
+  }
 }

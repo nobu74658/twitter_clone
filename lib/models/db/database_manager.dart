@@ -110,6 +110,22 @@ class DatabaseManager {
         .update(userDesc.toMap());
   }
 
+  Future<List<Tweet>> getCurrentUserTweet(String userId) async {
+    List<Tweet> tweets = [];
+    final query = await _db
+        .collection(tweets_collection)
+        .where(user_id, isEqualTo: userId)
+        .get();
+    for (int i = 0; i < query.docs.length; i++) {
+      tweets.add(
+        Tweet.fromMap(
+          query.docs[i].data(),
+        ),
+      );
+    }
+    return tweets;
+  }
+
   ///-------------tweets <end>-------------///
 
   ///-------------following followed <start>-------------///
