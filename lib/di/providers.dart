@@ -55,6 +55,8 @@ List<SingleChildWidget> viewModels = [
     create: (context) => FollowUnFollowViewModel(),
   ),
   ChangeNotifierProvider<FavoriteViewModel>(
-    create: (context) => FavoriteViewModel(),
+    create: (context) => FavoriteViewModel(
+      userRepository: context.read<UserRepository>(),
+    ),
   ),
 ];
