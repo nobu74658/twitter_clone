@@ -6,16 +6,20 @@ import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/utils/formatter.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/top/components/user_circle_icon.dart';
-import 'package:twitter_clone/view_model/favorite_view_model.dart';
 import 'package:twitter_clone/view_model/page_view_model.dart';
 import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TweetTile extends StatelessWidget {
-  const TweetTile({super.key, required this.tweet, this.currentUserId});
+  const TweetTile(
+      {super.key,
+      required this.tweet,
+      this.currentUserId,
+      required this.favoriteTweets});
 
   final Tweet tweet;
   final String? currentUserId;
+  final List<Tweet> favoriteTweets;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,11 @@ class TweetTile extends StatelessWidget {
             children: [
               _leftSide(context, user?.userIcon, user?.userId),
               const SizedBox(width: 10),
-              _rightSide(user?.userName, context),
+              _rightSide(
+                user?.userName,
+                context,
+                favoriteTweets.contains(tweet),
+              ),
             ],
           ),
         );
@@ -61,7 +69,7 @@ class TweetTile extends StatelessWidget {
     );
   }
 
-  _rightSide(String? userName, BuildContext context) {
+  _rightSide(String? userName, BuildContext context, bool isFavorite) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +83,7 @@ class TweetTile extends StatelessWidget {
             style: const TextStyle(color: Colors.black54),
           ),
           const SizedBox(height: 6),
-          _likePart(),
+          _likePart(isFavorite),
         ],
       ),
     );
@@ -114,32 +122,24 @@ class TweetTile extends StatelessWidget {
     );
   }
 
-  _likePart() async {
-    await Future(() {
-      /// currentUserのfavoriteTweetsのIdに含まれているかどうかでいいねしているかどうかを判定
-      // final favoriteViewModel =
-    });
-    return Consumer<FavoriteViewModel>(
-      builder: (context, model, child) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Icon(
-              Icons.favorite_border_outlined,
-              size: 16,
-            ),
-            Icon(
-              Icons.favorite,
-              color: Colors.red,
-              size: 16,
-            ),
-            Text(
-              "${tweet.favoriteNum}",
-              style: TextStyle(color: Colors.black54),
-            ),
-          ],
-        );
-      },
+  _likePart(bool isFavorite) async {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(
+          Icons.favorite_border_outlined,
+          size: 16,
+        ),
+        Icon(
+          Icons.favorite,
+          color: Colors.red,
+          size: 16,
+        ),
+        Text(
+          "${tweet.favoriteNum}",
+          style: TextStyle(color: Colors.black54),
+        ),
+      ],
     );
   }
 }
