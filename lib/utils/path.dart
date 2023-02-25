@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/view/common/screen/error_screen.dart';
-import 'package:twitter_clone/view/common/screen/splash_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/check_invite_email.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/customize_screen.dart';
 import 'package:twitter_clone/view/sign_in_up/screens/email_reset_confirm_screen.dart';
@@ -42,7 +41,7 @@ final GoRouter router = GoRouter(
     if (firebaseUser == null) {
       switch (state.location) {
         case kInitialPath:
-          path = kInitialPath;
+          path = kLoginPath;
           break;
         case kRegisterPath:
           break;
@@ -59,8 +58,11 @@ final GoRouter router = GoRouter(
       }
     } else {
       switch (state.location) {
+        case "":
+          path = kTopPath;
+          break;
         case kInitialPath:
-          path = kInitialPath;
+          path = kTopPath;
           break;
         case kRegisterPath:
           path = kTopPath;
@@ -83,12 +85,6 @@ final GoRouter router = GoRouter(
     return path;
   },
   routes: [
-    GoRoute(
-      path: kInitialPath,
-      pageBuilder: (context, state) => const MaterialPage(
-        child: SplashScreen(),
-      ),
-    ),
     GoRoute(
       path: kTopPath,
       pageBuilder: (context, state) => const MaterialPage(
