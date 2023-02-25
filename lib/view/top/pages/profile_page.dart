@@ -53,39 +53,43 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              context.push(kEditProfilePath);
+              context.go(kEditProfilePath);
             },
             child: const Text("プロフィール編集"),
           ),
           const SizedBox(height: 10),
-          Row(
-            children: [
-              _followFolowedButton(
-                context: context,
-                num: currentUser?.followingNum,
-              ),
-              const SizedBox(width: 10),
-              _followFolowedButton(
-                context: context,
-                isFollow: false,
-                num: currentUser?.followedNum,
-              ),
-              const Spacer(),
-            ],
+          Consumer<UserViewModel>(
+            builder: (context, model, child) {
+              return Row(
+                children: [
+                  _followFolowedButton(
+                    context: context,
+                    num: model.currentUser?.followingNum,
+                  ),
+                  const SizedBox(width: 10),
+                  _followFolowedButton(
+                    context: context,
+                    isFollow: false,
+                    num: model.currentUser?.followedNum,
+                  ),
+                  const Spacer(),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 6),
           Row(
             children: [
               ElevatedButton(
                 onPressed: () {
-                  context.push(kEmailResetAuthPath);
+                  context.go(kEmailResetAuthPath);
                 },
                 child: const Text("メールアドレスを変更"),
               ),
               const SizedBox(width: 20),
               ElevatedButton(
                 onPressed: () {
-                  context.push(kPassResetAuthPath);
+                  context.go(kPassResetAuthPath);
                 },
                 child: const Text("パスワードを変更"),
               ),

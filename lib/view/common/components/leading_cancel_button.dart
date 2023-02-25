@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:twitter_clone/utils/path.dart';
 
 class LeadingCancelButton extends StatelessWidget {
   const LeadingCancelButton(
@@ -18,7 +19,7 @@ class LeadingCancelButton extends StatelessWidget {
         "キャンセル",
       ),
       onPressed: () {
-        context.pop();
+        context.go(kTopPath);
       },
     );
   }
