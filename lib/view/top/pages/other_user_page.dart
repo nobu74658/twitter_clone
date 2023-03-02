@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter_clone/data_models/tweet.dart';
-import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/tweet/tweet.dart';
+import 'package:twitter_clone/data_models/user/user.dart';
 import 'package:twitter_clone/utils/keys.dart';
 import 'package:twitter_clone/view/common/components/leading_cancel_button.dart';
 import 'package:twitter_clone/view/common/components/primary_app_bar.dart';
@@ -131,7 +131,7 @@ class OtherUserPage extends StatelessWidget {
                       } else {
                         final data =
                             docs[index - 6].data() as Map<String, dynamic>;
-                        final tweet = Tweet.fromMap(data);
+                        final tweet = Tweet.fromJson(data);
                         return TweetTile(
                           tweet: tweet,
                           favoriteTweets: favoriteViewModel.favoriteTweets,

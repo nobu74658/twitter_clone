@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter_clone/data_models/tweet.dart';
+import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/utils/formatter.dart';
 import 'package:twitter_clone/utils/path.dart';
 import 'package:twitter_clone/view/top/components/user_circle_icon.dart';

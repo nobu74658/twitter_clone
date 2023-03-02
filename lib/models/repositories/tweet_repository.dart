@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:twitter_clone/data_models/tweet.dart';
+import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:uuid/uuid.dart';
 
