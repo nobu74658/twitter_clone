@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:twitter_clone/data_models/tweet.dart';
+import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/data_models/user/user.dart';
-import 'package:twitter_clone/data_models/user_desc.dart';
+import 'package:twitter_clone/data_models/userDesc/user_desc.dart';
 import 'package:twitter_clone/utils/keys.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,7 +65,7 @@ class DatabaseManager {
     await _db
         .collection(tweets_collection)
         .doc(tweet.tweetId)
-        .set(tweet.toMap());
+        .set(tweet.toJson());
   }
 
   // TweetをtweetIdで削除する
@@ -91,7 +91,7 @@ class DatabaseManager {
     final tweets = <Tweet>[];
     for (int i = 0; i < query.docs.length; i++) {
       tweets.add(
-        Tweet.fromMap(
+        Tweet.fromJson(
           query.docs[i].data(),
         ),
       );
@@ -117,7 +117,7 @@ class DatabaseManager {
     await _db
         .collection(tweets_collection)
         .doc(tweetId)
-        .update(userDesc.toMap());
+        .update(userDesc.toJson());
   }
 
   Future<List<Tweet>> getCurrentUserTweet(String userId) async {
@@ -128,7 +128,7 @@ class DatabaseManager {
         .get();
     for (int i = 0; i < query.docs.length; i++) {
       tweets.add(
-        Tweet.fromMap(
+        Tweet.fromJson(
           query.docs[i].data(),
         ),
       );
@@ -285,7 +285,7 @@ class DatabaseManager {
       final favoriteTweet =
           await _db.collection(tweets_collection).doc(favoriteTweetId).get();
       favoriteTweets.add(
-        Tweet.fromMap(
+        Tweet.fromJson(
           favoriteTweet.data()!,
         ),
       );
