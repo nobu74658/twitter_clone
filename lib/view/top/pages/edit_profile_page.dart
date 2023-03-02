@@ -38,7 +38,7 @@ class EditProfilePage extends StatelessWidget {
                       children: [
                         TextButton(
                           onPressed: () {
-                            context.go(kTopPath);
+                            context.go(kTimeLinePath);
                           },
                           child: const Text("戻る"),
                         ),
@@ -47,9 +47,9 @@ class EditProfilePage extends StatelessWidget {
                             if (currentUser != null) {
                               await model
                                   .updateUserInfo()
-                                  .then((value) => context.go(kTopPath));
+                                  .then((value) => context.go(kTimeLinePath));
                             } else {
-                              context.go(kTopPath);
+                              context.go(kTimeLinePath);
                             }
                           },
                           child: Text(currentUser != null ? "完了" : "戻る"),

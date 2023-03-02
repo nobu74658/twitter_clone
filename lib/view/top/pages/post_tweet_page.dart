@@ -26,7 +26,7 @@ class PostTweetPage extends StatelessWidget {
             onPressed: () async {
               await tweetViewModel
                   .postTweet()
-                  .then((value) => context.go(kTopPath));
+                  .then((value) => context.go(kTimeLinePath));
               tweetViewModel.endProcess();
             },
             child: const Text("ツイートする"),

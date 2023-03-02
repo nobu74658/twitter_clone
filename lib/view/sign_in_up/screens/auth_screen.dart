@@ -106,7 +106,7 @@ class AuthScreen extends StatelessWidget {
         if (value == null) {
           SD.unknownError(context);
         } else {
-          context.go(value ? kTopPath : kCheckInviteEmailPath);
+          context.go(value ? kTimeLinePath : kCheckInviteEmailPath);
         }
       });
     } on FirebaseAuthException catch (e) {
