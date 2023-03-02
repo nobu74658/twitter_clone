@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
-import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user/user.dart';
 import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/utils/keys.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +16,7 @@ class DatabaseManager {
 
   // Userを新規作成
   Future<void> setCurrentUser(User user) async {
-    await _db.collection(users_collection).doc(user.userId).set(user.toMap());
+    await _db.collection(users_collection).doc(user.userId).set(user.toJson());
   }
 
   // userIdでUserを探す
@@ -37,7 +37,7 @@ class DatabaseManager {
         .collection(users_collection)
         .where(user_id, isEqualTo: userId)
         .get();
-    return User.fromMap(query.docs[0].data());
+    return User.fromJson(query.docs[0].data());
   }
 
   // Userを更新
@@ -45,7 +45,7 @@ class DatabaseManager {
     await _db
         .collection(users_collection)
         .doc(user.userId)
-        .update(user.toMap());
+        .update(user.toJson());
   }
 
   // Firebase Storageに画像を追加＆URLを返す
@@ -190,7 +190,7 @@ class DatabaseManager {
           .collection(users_collection)
           .doc(followingId)
           .get()
-          .then((value) => User.fromMap(value.data()!));
+          .then((value) => User.fromJson(value.data()!));
       if (followingUser != null) {
         final followingUserDesc = UserDesc(
           userId: followingUser.userId,
@@ -216,7 +216,7 @@ class DatabaseManager {
       final followedId = query.docs[i].data()["followingId"];
       final followedUser =
           await _db.collection(users_collection).doc(followedId).get().then(
-                (value) => User.fromMap(value.data()!),
+                (value) => User.fromJson(value.data()!),
               );
       if (followedUser != null) {
         final followedUserDesc = UserDesc(

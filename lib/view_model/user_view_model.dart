@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user/user.dart';
 import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/models/repositories/user_repository.dart';
 

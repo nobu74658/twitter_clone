@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:twitter_clone/data_models/tweet.dart';
-import 'package:twitter_clone/data_models/user.dart';
+import 'package:twitter_clone/data_models/user/user.dart';
 import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:uuid/uuid.dart';
@@ -137,8 +137,8 @@ class UserRepository {
     }
     User newUserInfo = currentUser!.copyWith(
       userIcon: imageUrl,
-      userName: userName,
-      bio: bio,
+      userName: userName ?? "",
+      bio: bio ?? "",
     );
     currentUser = newUserInfo;
 
