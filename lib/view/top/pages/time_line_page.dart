@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter_clone/data_models/tweet.dart';
+import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/view/top/components/tweet_tile.dart';
 import 'package:twitter_clone/view_model/favorite_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
@@ -47,7 +47,7 @@ class TimeLinePage extends StatelessWidget {
             itemCount: docs.length,
             itemBuilder: (context, index) {
               final data = docs[index].data() as Map<String, dynamic>;
-              final tweet = Tweet.fromMap(data);
+              final tweet = Tweet.fromJson(data);
               return TweetTile(
                 tweet: tweet,
                 currentUserId: currentUser.userId,
