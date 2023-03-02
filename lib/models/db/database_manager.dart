@@ -271,20 +271,22 @@ class DatabaseManager {
 
   ///-------------following followed <end>-------------///
 
-  ///-------------favorite-tweet, favorite-by-user <end>-------------///
+  ///-------------favorite-tweets <start>-------------///
 
   /// いいねしたツイートを全て取得する
   Future<List<Tweet>> getFavoriteTweets(String userId) async {
     List<Tweet> favoriteTweets = [];
     final query = await _db
-        .collection(users_collection)
-        .doc(userId)
         .collection(favorite_tweet_collection)
+        .where(user_id, isEqualTo: userId)
         .get();
     for (int i = 0; i < query.docs.length; i++) {
+      final favoriteTweetId = query.docs[i].data()[tweet_id];
+      final favoriteTweet =
+          await _db.collection(tweets_collection).doc(favoriteTweetId).get();
       favoriteTweets.add(
         Tweet.fromMap(
-          query.docs[i].data(),
+          favoriteTweet.data()!,
         ),
       );
     }
@@ -293,41 +295,56 @@ class DatabaseManager {
 
   // Tweetをいいねする
   // Tweetのいいねの数を更新する
-  Future<void> setFavoriteTweet(String userId, Tweet tweet) async {
-    final favoriteTweetRef = _db
-        .collection(users_collection)
-        .doc(userId)
-        .collection(favorite_tweet_collection)
-        .doc(tweet.tweetId);
-    final tweetRef = _db.collection(tweets_collection).doc(tweet.tweetId);
-    await _db.runTransaction((transaction) async {
-      transaction.set(favoriteTweetRef, tweet.toMap());
-      transaction.set(
-        tweetRef,
-        {favorite_num: FieldValue.increment(1)},
-        SetOptions(merge: true),
-      );
-    });
+  Future<void> setFavoriteTweet(String userId, String tweetId) async {
+    final favoriteTweetId = Uuid().v1();
+    final favoriteTweetRef =
+        _db.collection(favorite_tweet_collection).doc(favoriteTweetId);
+    final tweetRef = _db.collection(tweets_collection).doc(tweetId);
+    await _db.runTransaction(
+      (transaction) async {
+        transaction.set(
+          favoriteTweetRef,
+          {
+            favorite_tweet_id: favoriteTweetId,
+            tweet_id: tweetId,
+            user_id: userId,
+            "createdAt": FieldValue.serverTimestamp(),
+          },
+        );
+        transaction.set(
+          tweetRef,
+          {favorite_num: FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+      },
+    );
   }
 
   // Tweetのいいねを取り消す
   // Tweetのいいねの数を更新する
-  Future<void> deleteFavoriteTweet(String userId, Tweet tweet) async {
-    final favoriteTweetRef = _db
-        .collection(users_collection)
-        .doc(userId)
+  Future<void> deleteFavoriteTweet(String userId, String tweetId) async {
+    final query = await _db
         .collection(favorite_tweet_collection)
-        .doc(tweet.tweetId);
-    final tweetRef = _db.collection(tweets_collection).doc(tweet.tweetId);
-    _db.runTransaction((transaction) async {
-      transaction.delete(favoriteTweetRef);
-      transaction.set(
-        tweetRef,
-        {favorite_num: FieldValue.increment(-1)},
-        SetOptions(merge: true),
+        .where(tweet_id, isEqualTo: tweetId)
+        .where(user_id, isEqualTo: userId)
+        .get();
+    if (query.docs.isNotEmpty) {
+      String favoriteTweetId = query.docs[0][favorite_tweet_id];
+      final favoriteTweetRef =
+          _db.collection(favorite_tweet_collection).doc(favoriteTweetId);
+      final tweetRef = _db.collection(tweets_collection).doc(tweetId);
+      await _db.runTransaction(
+        (transaction) async {
+          transaction.delete(favoriteTweetRef);
+          transaction.set(
+            tweetRef,
+            {favorite_num: FieldValue.increment(-1)},
+            SetOptions(merge: true),
+          );
+        },
       );
-    });
+    }
   }
 
-  ///-------------favorite-tweet, favorite-by-user <end>-------------///
+  ///-------------favorite-tweets <end>-------------///
 }
