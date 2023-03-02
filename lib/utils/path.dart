@@ -46,7 +46,6 @@ const String kProfilePath = "/profile";
 final GoRouter router = GoRouter(
   initialLocation: kInitialPath,
   redirect: (context, state) async {
-    await _future(context);
     final firebaseUser = FirebaseAuth.instance.currentUser;
     String? path;
     if (firebaseUser == null) {
@@ -68,6 +67,7 @@ final GoRouter router = GoRouter(
           path = kLoginPath;
       }
     } else {
+      await _future(context);
       switch (state.location) {
         case "":
           path = kTimeLinePath;
