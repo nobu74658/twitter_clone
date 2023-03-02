@@ -6,6 +6,7 @@ import 'package:twitter_clone/data_models/tweet.dart';
 import 'package:twitter_clone/data_models/user.dart';
 import 'package:twitter_clone/data_models/user_desc.dart';
 import 'package:twitter_clone/utils/keys.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseManager {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -139,95 +140,95 @@ class DatabaseManager {
 
   ///-------------following followed <start>-------------///
 
-  // 他ユーザーをフォローした時に、following, followedを追加
-  Future<void> setFollowing(
-      UserDesc currentUserDesc, UserDesc otherUserDesc) async {
-    final currentUserRef =
-        _db.collection(users_collection).doc(currentUserDesc.userId);
-    final followingRef = currentUserRef
-        .collection(following_collection)
-        .doc(otherUserDesc.userId);
-    final otherUserRef =
-        _db.collection(users_collection).doc(otherUserDesc.userId);
-    final followedRef = otherUserRef
-        .collection(followed_collection)
-        .doc(currentUserDesc.userId);
-    await _db.runTransaction((transaction) async {
-      transaction.set(followingRef, otherUserDesc.toMap());
-      transaction.set(currentUserRef, {"followingNum": FieldValue.increment(1)},
-          SetOptions(merge: true));
-      transaction.set(followedRef, currentUserDesc.toMap());
-      transaction.set(otherUserRef, {"followedNum": FieldValue.increment(1)},
-          SetOptions(merge: true));
-    });
+  // 他ユーザーをフォローした時に、relationshipsに書き込み
+  Future<void> setRelationships(
+    String followingId,
+    String followedId,
+  ) async {
+    final relationshipId = Uuid().v1();
+    await _db.collection(relationships_collectin).doc(relationshipId).set(
+      {
+        relationship_id: relationshipId,
+        following_id: followingId,
+        followed_id: followedId,
+        "createdAt": FieldValue.serverTimestamp(),
+      },
+    );
   }
 
-  // フォロー中のユーザーをfollowingから削除
-  Future<void> deleteFollowing(String currentUserId, String otherUserId) async {
-    final currentUserRef = _db.collection(users_collection).doc(currentUserId);
-    final followingRef =
-        currentUserRef.collection(following_collection).doc(otherUserId);
-    final otherUserRef = _db.collection(users_collection).doc(otherUserId);
-    final followedRef =
-        otherUserRef.collection(followed_collection).doc(currentUserId);
-
-    await _db.runTransaction((transaction) async {
-      transaction.delete(followingRef);
-      transaction.set(currentUserRef,
-          {"followingNum": FieldValue.increment(-1)}, SetOptions(merge: true));
-      transaction.delete(followedRef);
-      transaction.set(otherUserRef, {"followedNum": FieldValue.increment(-1)},
-          SetOptions(merge: true));
-    });
+  // フォロー中のユーザーをrelationshipsから削除
+  Future<void> deleteRelationship(String followingId, String followedId) async {
+    final query = await _db
+        .collection(relationships_collectin)
+        .where(following_id, isEqualTo: followingId)
+        .where(
+          followed_id,
+          isEqualTo: followedId,
+        )
+        .get();
+    if (query.docs.isNotEmpty) {
+      final relationshipId = query.docs[0].data()["relationshipId"];
+      await _db
+          .collection(relationships_collectin)
+          .doc(relationshipId)
+          .delete();
+    }
   }
 
-  // folloingの中のユーザーを全て取得
-  Future<List<UserDesc>> getFollowingUsers(String userId) async {
+  // relationshipsの中から自分がfollowしているユーザーを全て取得
+  Future<List<UserDesc>> getFollowingUsersFromRelationships(
+      String userId) async {
     final followingUsers = <UserDesc>[];
     final query = await _db
-        .collection(users_collection)
-        .doc(userId)
-        .collection(following_collection)
+        .collection(relationships_collectin)
+        .where(following_id, isEqualTo: userId)
         .get();
     for (int i = 0; i < query.docs.length; i++) {
-      followingUsers.add(UserDesc.fromMap(query.docs[i].data()));
+      final followingId = query.docs[i].data()["followedId"];
+      print(followingId);
+      final followingUser = await _db
+          .collection(users_collection)
+          .doc(followingId)
+          .get()
+          .then((value) => User.fromMap(value.data()!));
+      if (followingUser != null) {
+        final followingUserDesc = UserDesc(
+          userId: followingUser.userId,
+          userName: followingUser.userName,
+          userIcon: followingUser.userIcon,
+          bio: followingUser.bio,
+        );
+        followingUsers.add(followingUserDesc);
+      }
     }
     return followingUsers;
   }
 
-  // followedの中のユーザーを取得
-  Future<List<UserDesc>> getFollowedUsers(String userId) async {
+  // relationshipの中から自分のフォロワーを全て取得
+  Future<List<UserDesc>> getFollowedUsersFromRelationships(
+      String userId) async {
     final followedUsers = <UserDesc>[];
     final query = await _db
-        .collection(users_collection)
-        .doc(userId)
-        .collection(followed_collection)
+        .collection(relationships_collectin)
+        .where(followed_id, isEqualTo: userId)
         .get();
     for (int i = 0; i < query.docs.length; i++) {
-      followedUsers.add(UserDesc.fromMap(query.docs[i].data()));
+      final followedId = query.docs[i].data()["followingId"];
+      final followedUser =
+          await _db.collection(users_collection).doc(followedId).get().then(
+                (value) => User.fromMap(value.data()!),
+              );
+      if (followedUser != null) {
+        final followedUserDesc = UserDesc(
+          userId: followedUser.userId,
+          userName: followedUser.userName,
+          userIcon: followedUser.userIcon,
+          bio: followedUser.bio,
+        );
+        followedUsers.add(followedUserDesc);
+      }
     }
     return followedUsers;
-  }
-
-  // following, followedの中のユーザーデータを全て更新する
-  Future<void> updateAllFollowingFollowed(UserDesc userDesc) async {
-    final followedQuery = await _db
-        .collectionGroup(followed_collection)
-        .where(user_id, isEqualTo: userDesc.userId)
-        .get();
-    final followingQuery = await _db
-        .collectionGroup(following_collection)
-        .where(user_id, isEqualTo: userDesc.userId)
-        .get();
-    final tasks = <Future<void>>[];
-    print(followingQuery.docs.length);
-    for (int i = 0; i < followingQuery.docs.length; i++) {
-      tasks.add(followingQuery.docs[i].reference.set(userDesc.toMap()));
-    }
-    for (int i = 0; i < followedQuery.docs.length; i++) {
-      tasks.add(followedQuery.docs[i].reference.set(userDesc.toMap()));
-    }
-    await Future.wait(tasks);
   }
 
   // フォロー、フォロワー数を取得して書き込む
@@ -254,12 +255,13 @@ class DatabaseManager {
     );
   }
 
-  Future<bool> isFollowingUser(String userId, String otherUserId) async {
+  // 自分がフォローしているユーザーなのかどうか
+  Future<bool> isFollowingUserFromRelationships(
+      String userId, String otherUserId) async {
     final query = await _db
-        .collection(users_collection)
-        .doc(userId)
-        .collection(following_collection)
-        .where(user_id, isEqualTo: otherUserId)
+        .collection(relationships_collectin)
+        .where(following_id, isEqualTo: userId)
+        .where(followed_id, isEqualTo: otherUserId)
         .get();
     if (query.docs.isNotEmpty) {
       return true;
@@ -270,13 +272,6 @@ class DatabaseManager {
   ///-------------following followed <end>-------------///
 
   ///-------------favorite-tweet, favorite-by-user <end>-------------///
-  // Tweetをいいねする
-
-  // Tweetのいいねの数を更新する
-
-  // Tweetのいいねを取り消す
-
-  // Tweetのいいねの数をtweetIdで取得する
 
   /// いいねしたツイートを全て取得する
   Future<List<Tweet>> getFavoriteTweets(String userId) async {
@@ -296,6 +291,8 @@ class DatabaseManager {
     return favoriteTweets;
   }
 
+  // Tweetをいいねする
+  // Tweetのいいねの数を更新する
   Future<void> setFavoriteTweet(String userId, Tweet tweet) async {
     final favoriteTweetRef = _db
         .collection(users_collection)
@@ -313,6 +310,8 @@ class DatabaseManager {
     });
   }
 
+  // Tweetのいいねを取り消す
+  // Tweetのいいねの数を更新する
   Future<void> deleteFavoriteTweet(String userId, Tweet tweet) async {
     final favoriteTweetRef = _db
         .collection(users_collection)

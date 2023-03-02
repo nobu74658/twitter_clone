@@ -151,9 +151,6 @@ class UserRepository {
     );
     // Tweet中のユーザー情報を更新
     await dbManager.updateAllTweet(userDesc);
-
-    // following, followed中のユーザー情報を更新
-    await dbManager.updateAllFollowingFollowed(userDesc);
   }
 
   // パスワードを変更
@@ -186,25 +183,34 @@ class UserRepository {
     );
     currentUser =
         currentUser!.copyWith(followingNum: currentUser!.followingNum + 1);
-    await dbManager.setFollowing(currentUserDesc, otherUserDesc);
+    // await dbManager.setFollowing(currentUserDesc, otherUserDesc);
+    await dbManager.setRelationships(
+        currentUserDesc.userId, otherUserDesc.userId);
   }
 
   Future<List<UserDesc>> getFollowingUsers() async {
-    return await dbManager.getFollowingUsers(currentUser!.userId);
+    // return await dbManager.getFollowingUsers(currentUser!.userId);
+    return await dbManager
+        .getFollowingUsersFromRelationships(currentUser!.userId);
   }
 
   Future<List<UserDesc>> getFollowedUsers() async {
-    return await dbManager.getFollowedUsers(currentUser!.userId);
+    // return await dbManager.getFollowedUsers(currentUser!.userId);
+    return await dbManager
+        .getFollowedUsersFromRelationships(currentUser!.userId);
   }
 
   Future<void> deleteFollowingUser(String otherUserId) async {
-    await dbManager.deleteFollowing(currentUser!.userId, otherUserId);
+    // await dbManager.deleteFollowing(currentUser!.userId, otherUserId);
+    await dbManager.deleteRelationship(currentUser!.userId, otherUserId);
     currentUser =
         currentUser!.copyWith(followingNum: currentUser!.followingNum - 1);
   }
 
   Future<bool> isFollowingUser(String otherUserId) async {
-    return await dbManager.isFollowingUser(currentUser!.userId, otherUserId);
+    // return await dbManager.isFollowingUser(currentUser!.userId, otherUserId);
+    return await dbManager.isFollowingUserFromRelationships(
+        currentUser!.userId, otherUserId);
   }
 
   Future<List<Tweet>> getFavoriteTweets() async {
