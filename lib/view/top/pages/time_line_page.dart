@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/view/top/components/tweet_tile.dart';
 import 'package:twitter_clone/view_model/favorite_view_model.dart';
+import 'package:twitter_clone/view_model/tweet_view_model.dart';
 import 'package:twitter_clone/view_model/user_view_model.dart';
 
 class TimeLinePage extends StatelessWidget {
@@ -14,12 +15,10 @@ class TimeLinePage extends StatelessWidget {
     final userViewModel = context.read<UserViewModel>();
     final currentUser = userViewModel.currentUser!;
     final favoriteViewModel = context.read<FavoriteViewModel>();
+    final tweetViewModel = context.read<TweetViewModel>();
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("tweets")
-            .orderBy("createdAt", descending: true)
-            .snapshots(),
+        stream: tweetViewModel.getTweetSnapshot(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return const Center(

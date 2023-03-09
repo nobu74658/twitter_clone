@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/models/db/database_manager.dart';
 import 'package:uuid/uuid.dart';
@@ -40,5 +41,9 @@ class TweetRepository {
 
   Future<void> deleteTweet(String tweetId) async {
     await dbManager.deleteTweet(tweetId);
+  }
+
+  Stream<QuerySnapshot<Object?>> getTweetsSnapshot() {
+    return dbManager.getTweetsSnapshot();
   }
 }
