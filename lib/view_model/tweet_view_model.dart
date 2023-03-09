@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/data_models/tweet/tweet.dart';
 import 'package:twitter_clone/models/repositories/tweet_repository.dart';
@@ -80,5 +81,9 @@ class TweetViewModel extends ChangeNotifier {
     if (imageFile != null) isImagePicked = true;
     isProcessing = false;
     notifyListeners();
+  }
+
+  Stream<QuerySnapshot> getTweetSnapshot() {
+    return tweetRepository.getTweetsSnapshot();
   }
 }

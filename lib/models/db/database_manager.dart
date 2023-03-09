@@ -136,6 +136,14 @@ class DatabaseManager {
     return tweets;
   }
 
+  //TimeLinePageで表示するツイートをStreamで取得
+  Stream<QuerySnapshot<Object?>> getTweetsSnapshot() {
+    return _db
+        .collection(tweets_collection)
+        .orderBy("createdAt", descending: true)
+        .snapshots();
+  }
+
   ///-------------tweets <end>-------------///
 
   ///-------------following followed <start>-------------///
